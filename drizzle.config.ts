@@ -8,7 +8,7 @@ export default defineConfig({
   verbose: true,
   strict: true,
   dbCredentials: {
-    url: 'postgres://postgres:postgres@localhost:5432/reserve-movies',
+    url: `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}`,
     ssl: false
   }
 })
