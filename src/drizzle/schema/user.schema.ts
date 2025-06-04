@@ -13,6 +13,7 @@ export const User = pgTable('User', {
   email: varchar({ length: 255 }).notNull().unique(),
   password: varchar({ length: 255 }).notNull(),
   role: userRoleEnum().default('USER'),
+  refresh_token_hash: varchar({ length: 255 }),
   ...timestamps
 })
 

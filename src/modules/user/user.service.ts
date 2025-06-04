@@ -6,8 +6,6 @@ import { eq } from 'drizzle-orm'
 import { hashPassword } from '~/utils/utils'
 import { CreateAuthDto } from '~/modules/auth/dto/create-auth.dto'
 
-export type User = any
-
 @Injectable()
 export class UserService {
   async create(reqBody: CreateAuthDto) {
@@ -28,7 +26,7 @@ export class UserService {
     return `This action returns all user`
   }
 
-  async findOne(email: string): Promise<User | undefined> {
+  async findOne(email: string) {
     const [user] = await db.select().from(User).where(eq(User.email, email))
     return user
   }

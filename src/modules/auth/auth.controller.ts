@@ -1,22 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Request, HttpStatus, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { UpdateAuthDto } from './dto/update-auth.dto'
-import { AuthGuard } from '@nestjs/passport'
-import { LocalAuthGuard } from '~/modules/auth/passport/local-auth.guard'
-import { JwtAuthGuard } from '~/modules/auth/passport/jwt-auth.guard'
+import { LocalAuthGuard } from '~/modules/auth/guards/local-auth.guard'
 import { Public } from '~/decorators/decorators'
+import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
+import { JwtRefreshTokenGuard } from '~/modules/auth/guards/jwt-refresh-token.guard'
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
   @UseGuards(LocalAuthGuard)
-  @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Request() req) {
     return this.authService.login(req.user)
+  }
+
+  @UseGuards(JwtRefreshTokenGuard)
+  @Post('refresh')
+  async refreshAccessToken(@Request() req) {
+    const access_token = this.authService.generateAccessToken({
+      user_id: req.user.id,
+      email: req.user.email
+    })
+    return {
+      user_id: req.user.id,
+      access_token
+    }
   }
 
   @Public()
@@ -25,6 +36,7 @@ export class AuthController {
     return this.authService.signUp(body)
   }
 
+  @UseGuards(JwtAccessTokenGuard)
   @Get()
   findAll() {
     return this.authService.findAll()
