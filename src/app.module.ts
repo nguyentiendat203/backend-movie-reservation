@@ -11,9 +11,10 @@ import { SeatModule } from '~/modules/seat/seat.module'
 import { ShowtimeModule } from '~/modules/showtime/showtime.module'
 import { TemporaryLockModule } from '~/modules/temporary_lock/temporary_lock.module'
 import { TheaterModule } from '~/modules/theater/theater.module'
+import { AuthModule } from '~/modules/auth/auth.module'
 
 @Module({
-  imports: [UserModule, MovieModule, GenreModule, ReservationModule, ReservationSeatModule, RoomModule, SeatModule, ShowtimeModule, TemporaryLockModule, TheaterModule],
+  imports: [AuthModule, UserModule, MovieModule, GenreModule, ReservationModule, ReservationSeatModule, RoomModule, SeatModule, ShowtimeModule, TemporaryLockModule, TheaterModule],
   controllers: [AppController],
   providers: [AppService]
 })
