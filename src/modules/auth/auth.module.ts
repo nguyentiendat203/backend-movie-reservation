@@ -11,15 +11,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from '~/modules/auth/passport/jwt-auth.guard'
 
 @Module({
-  imports: [
-    UserModule,
-    PassportModule,
-    JwtModule.register({
-      global: true,
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      signOptions: { expiresIn: '10s' }
-    })
-  ],
+  imports: [UserModule, PassportModule, JwtModule.register({})],
   controllers: [AuthController],
   providers: [
     {

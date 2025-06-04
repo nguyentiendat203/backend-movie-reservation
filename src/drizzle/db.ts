@@ -1,8 +1,8 @@
-import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres'
+import { env } from '~/common/config/environment'
 
 export const db = drizzle({
   connection: {
-    connectionString: `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}`
+    connectionString: `postgres://${env.DB_USER}:${env.DB_PASSWORD}@localhost:${env.DB_PORT}/${env.DB_NAME}`
   }
 })

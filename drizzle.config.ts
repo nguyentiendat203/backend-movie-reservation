@@ -1,5 +1,5 @@
-import 'dotenv/config'
 import { defineConfig } from 'drizzle-kit'
+import { env } from '~/common/config/environment'
 
 export default defineConfig({
   out: './src/drizzle/migrations',
@@ -8,7 +8,7 @@ export default defineConfig({
   verbose: true,
   strict: true,
   dbCredentials: {
-    url: `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    url: `postgres://${env.DB_USER}:${env.DB_PASSWORD}@localhost:${env.DB_PORT}/${env.DB_NAME}`,
     ssl: false
   }
 })

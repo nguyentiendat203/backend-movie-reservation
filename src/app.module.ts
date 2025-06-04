@@ -12,9 +12,23 @@ import { ShowtimeModule } from '~/modules/showtime/showtime.module'
 import { TemporaryLockModule } from '~/modules/temporary_lock/temporary_lock.module'
 import { TheaterModule } from '~/modules/theater/theater.module'
 import { AuthModule } from '~/modules/auth/auth.module'
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
-  imports: [AuthModule, UserModule, MovieModule, GenreModule, ReservationModule, ReservationSeatModule, RoomModule, SeatModule, ShowtimeModule, TemporaryLockModule, TheaterModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    MovieModule,
+    GenreModule,
+    ReservationModule,
+    ReservationSeatModule,
+    RoomModule,
+    SeatModule,
+    ShowtimeModule,
+    TemporaryLockModule,
+    TheaterModule,
+    ConfigModule.forRoot({ isGlobal: true })
+  ],
   controllers: [AppController],
   providers: [AppService]
 })

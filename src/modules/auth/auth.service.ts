@@ -2,8 +2,11 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { UpdateAuthDto } from './dto/update-auth.dto'
 import { JwtService } from '@nestjs/jwt'
-import { User as UserType, UserService } from '../user/user.service'
+import { UserService } from '../user/user.service'
 import * as bcrypt from 'bcrypt'
+import { IUser } from '~/modules/user/interfaces/user.interface'
+import { IJwtPayload } from '~/common/types'
+import { env } from '~/common/config/environment'
 
 @Injectable()
 export class AuthService {
@@ -11,15 +14,6 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JwtService
   ) {}
-
-  // async validateUser(email: string, pass: string): Promise<any> {
-  //   const user = await this.usersService.findOne(email)
-  //   if (user && user.password === pass) {
-  //     const { password, ...result } = user
-  //     return result
-  //   }
-  //   return null
-  // }
 
   async validateUser(username: string, pass: string): Promise<any> {
     if (!username || !pass) {
@@ -38,35 +32,30 @@ export class AuthService {
     return user
   }
 
-  async login(user: UserType): Promise<{ user_id: string; access_token: string }> {
+  async login(user: IUser): Promise<{ user_id: string; access_token: string; refresh_token: string }> {
     const payload = { email: user.email, user_id: user.id }
+    const access_token = this.generateAccessToken(payload)
+    const refresh_token = this.generateRefreshToken(payload)
     return {
       user_id: user.id,
-      access_token: this.jwtService.sign(payload)
+      access_token,
+      refresh_token
     }
   }
 
-  // async login(body: { email: string; password: string }): Promise<{ user_id: string; access_token: string }> {
-  //   const { email, password } = body
-  //   if (!email || !password) {
-  //     throw new BadRequestException('Email and password are required')
-  //   }
+  generateAccessToken(payload: IJwtPayload): string {
+    return this.jwtService.sign(payload, {
+      expiresIn: '15s',
+      secret: env.ACCESS_TOKEN_SECRET
+    })
+  }
 
-  //   const [user] = await db.select({ id: User.id, password: User.password }).from(User).where(eq(User.email, email))
-  //   if (!user) {
-  //     throw new BadRequestException('Email not found')
-  //   }
-
-  //   const isMatch = await bcrypt.compare(password, user.password)
-  //   if (!isMatch) {
-  //     throw new BadRequestException('Invalid credentials')
-  //   }
-
-  //   const payload = { user_id: user.id }
-  //   const access_token = await this.jwtService.signAsync(payload)
-
-  //   return { user_id: user.id, access_token }
-  // }
+  generateRefreshToken(payload: IJwtPayload): string {
+    return this.jwtService.sign(payload, {
+      expiresIn: '14d',
+      secret: env.REFRESH_TOKEN_SECRET
+    })
+  }
 
   async signUp(reqBody: CreateAuthDto) {
     return this.usersService.create(reqBody)
