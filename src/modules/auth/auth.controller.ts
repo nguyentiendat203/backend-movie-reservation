@@ -3,9 +3,12 @@ import { AuthService } from './auth.service'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { UpdateAuthDto } from './dto/update-auth.dto'
 import { LocalAuthGuard } from '~/modules/auth/guards/local-auth.guard'
-import { Public } from '~/decorators/decorators'
+import { Public } from '~/decorators/auth.decorator'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 import { JwtRefreshTokenGuard } from '~/modules/auth/guards/jwt-refresh-token.guard'
+import { Roles } from '~/decorators/role.decorator'
+import { Role } from '~/common/types'
+import { RolesGuard } from '~/modules/auth/guards/roles.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -36,6 +39,8 @@ export class AuthController {
     return this.authService.signUp(body)
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(JwtAccessTokenGuard)
   @Get()
   findAll() {

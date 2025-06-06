@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
-import { IS_PUBLIC_KEY } from '~/decorators/decorators'
+import { IS_PUBLIC_KEY } from '~/decorators/auth.decorator'
 
 @Injectable()
 export class JwtRefreshTokenGuard extends AuthGuard('refresh-token') {

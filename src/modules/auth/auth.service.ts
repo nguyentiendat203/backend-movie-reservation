@@ -26,7 +26,7 @@ export class AuthService {
     return is_matching
   }
 
-  async getAuthenticatedUser(username: string, pass: string): Promise<any> {
+  async getAuthenticatedUser(username: string, pass: string) {
     if (!username || !pass) {
       throw new BadRequestException('Email and password are required')
     }
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   async login(user: IUser): Promise<{ user_id: string; access_token: string; refresh_token: string }> {
-    const payload = { email: user.email, user_id: user.id }
+    const payload = { email: user.email, user_id: user.id, role: user.role }
     const access_token = this.generateAccessToken(payload)
     const refresh_token = this.generateRefreshToken(payload)
     await this.storeRefreshToken(user.id, refresh_token)
