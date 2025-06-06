@@ -1,12 +1,4 @@
-import { Role } from '~/common/types'
+import { User } from '~/drizzle/schema'
+import { InferModel } from 'drizzle-orm'
 
-export interface IUser {
-  id: string
-  first_name: string
-  last_name: string
-  email: string
-  password: string
-  role: Role
-  created_at: Date
-  updated_at: Date | null
-}
+export type IUser = InferModel<typeof User>

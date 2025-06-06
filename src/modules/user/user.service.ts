@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { db } from '~/drizzle/db'
 import { User } from '~/drizzle/schema'
-import { eq } from 'drizzle-orm'
-import { hashPassword } from '~/utils/utils'
+import { eq, sql } from 'drizzle-orm'
 import { CreateAuthDto } from '~/modules/auth/dto/create-auth.dto'
+import { IUser } from '~/modules/user/interfaces/user.interface'
+import { hashString } from '~/utils/utils'
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,7 @@ export class UserService {
     if (existingUser) {
       throw new BadRequestException('Email already exists')
     }
-    const passwordHashed = await hashPassword(reqBody.password)
+    const passwordHashed = await hashString(reqBody.password)
     if (!passwordHashed) {
       throw new BadRequestException('Password hashing failed')
     }
@@ -22,12 +23,21 @@ export class UserService {
     return 'Registration successful'
   }
 
+  async updatePassword(user_id: string, hashedPassWord: string) {
+    await db
+      .update(User)
+      .set({ updated_at: sql`NOW()`, password: hashedPassWord })
+      .where(eq(User.id, user_id))
+  }
+
   findAll() {
     return `This action returns all user`
   }
 
-  async findOne(email: string) {
+  async findOne(email: string): Promise<IUser> {
+    console.log(email)
     const [user] = await db.select().from(User).where(eq(User.email, email))
+    console.log('user', user)
     return user
   }
 

@@ -13,6 +13,7 @@ import { TemporaryLockModule } from '~/modules/temporary_lock/temporary_lock.mod
 import { TheaterModule } from '~/modules/theater/theater.module'
 import { AuthModule } from '~/modules/auth/auth.module'
 import { ConfigModule } from '@nestjs/config'
+import { MailModule } from '~/modules/mail/mail.module'
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ConfigModule } from '@nestjs/config'
     ShowtimeModule,
     TemporaryLockModule,
     TheaterModule,
+    MailModule,
     ConfigModule.forRoot({ isGlobal: true })
   ],
   controllers: [AppController],

@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable } from '@nestjs/common'
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 import { IS_PUBLIC_KEY } from '~/decorators/auth.decorator'
@@ -7,6 +7,18 @@ import { IS_PUBLIC_KEY } from '~/decorators/auth.decorator'
 export class JwtRefreshTokenGuard extends AuthGuard('refresh-token') {
   constructor(private reflector: Reflector) {
     super()
+  }
+
+  handleRequest(err, user, info, context) {
+    if (err || !user) {
+      if (info?.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Refresh token expired')
+      } else if (info?.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Invalid refresh token')
+      }
+      throw new UnauthorizedException('Unauthorized')
+    }
+    return user
   }
 
   canActivate(context: ExecutionContext) {

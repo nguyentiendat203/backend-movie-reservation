@@ -9,10 +9,17 @@ import { JwtRefreshTokenGuard } from '~/modules/auth/guards/jwt-refresh-token.gu
 import { Roles } from '~/decorators/role.decorator'
 import { Role } from '~/common/types'
 import { RolesGuard } from '~/modules/auth/guards/roles.guard'
+import { MailService } from '~/modules/mail/mail.service'
+import { UserService } from '~/modules/user/user.service'
+import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mailService: MailService,
+    private userService: UserService
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -45,6 +52,20 @@ export class AuthController {
   @Get()
   findAll() {
     return this.authService.findAll()
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    const { user, token, message } = await this.authService.forgotPassword(email)
+    await this.mailService.sendEMail(user, token)
+    return { message }
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    const { payload, hashedPassWord } = await this.authService.verifyTokenAndHashNewPassWord(dto)
+    await this.userService.updatePassword(payload.user_id, hashedPassWord)
+    return { message: 'Mật khẩu đã được cập nhật thành công' }
   }
 
   @Get(':id')

@@ -10,6 +10,8 @@ import { env } from '~/common/config/environment'
 import { db } from '~/drizzle/db'
 import { User } from '~/drizzle/schema'
 import { eq, sql } from 'drizzle-orm'
+import { hashString } from '~/utils/utils'
+import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
 
 @Injectable()
 export class AuthService {
@@ -52,7 +54,7 @@ export class AuthService {
 
   generateAccessToken(payload: IJwtPayload): string {
     return this.jwtService.sign(payload, {
-      expiresIn: '15s',
+      expiresIn: '5m',
       secret: env.ACCESS_TOKEN_SECRET
     })
   }
@@ -69,7 +71,7 @@ export class AuthService {
   }
 
   async storeRefreshToken(user_id: string, token: string): Promise<void> {
-    const hashed_token = await bcrypt.hash(token, 12)
+    const hashed_token = await hashString(token)
     await db
       .update(User)
       .set({ updated_at: sql`NOW()`, refresh_token_hash: hashed_token })
@@ -89,6 +91,33 @@ export class AuthService {
     } catch (error) {
       throw error
     }
+  }
+
+  async forgotPassword(email: string): Promise<{ user: IUser; token: string; message: string }> {
+    const user = await this.usersService.findOne(email)
+    if (!user) throw new NotFoundException('Email not found')
+    const token = await this.generateAccessToken({ user_id: user.id, email })
+    return { user, token, message: 'Password reset token has sent to your email.' }
+  }
+
+  async verifyTokenAndHashNewPassWord(dto: ResetPasswordDto): Promise<{ payload: IJwtPayload; hashedPassWord: string }> {
+    const { token, newPassword, confirmPassword } = dto
+
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException('Confirm Password not true!')
+    }
+    const hashedPassWord = await hashString(newPassword)
+
+    let payload: IJwtPayload
+    try {
+      payload = this.jwtService.verify(token, {
+        secret: env.ACCESS_TOKEN_SECRET
+      })
+    } catch {
+      throw new BadRequestException('Token has expired or invalid!')
+    }
+
+    return { payload, hashedPassWord }
   }
 
   findAll() {

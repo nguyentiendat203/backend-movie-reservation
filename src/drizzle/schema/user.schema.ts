@@ -4,7 +4,9 @@ import { id, timestamps } from '~/drizzle/schema.helpers'
 import { Reservation } from '~/drizzle/schema/reservation.schema'
 import { Temporary_Lock } from '~/drizzle/schema/temporary_lock.schema'
 
-export const userRoleEnum = pgEnum('role', ['USER', 'ADMIN'])
+export const userRoles = ['USER', 'ADMIN'] as const
+export type UserRole = (typeof userRoles)[number]
+export const userRoleEnum = pgEnum('user_role', userRoles)
 
 export const User = pgTable('User', {
   id,

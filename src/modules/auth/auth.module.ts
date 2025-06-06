@@ -8,9 +8,10 @@ import { PassportModule } from '@nestjs/passport'
 import { ConfigModule } from '@nestjs/config'
 import { JwtAccessTokenStrategy } from '~/modules/auth/strategies/jwt-access-token.strategy'
 import { JwtRefreshTokenStrategy } from '~/modules/auth/strategies/jwt-refresh-token.strategy'
+import { MailModule } from '~/modules/mail/mail.module'
 
 @Module({
-  imports: [UserModule, PassportModule, JwtModule.register({}), ConfigModule],
+  imports: [UserModule, PassportModule, MailModule, JwtModule.register({}), ConfigModule],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtAccessTokenStrategy, JwtRefreshTokenStrategy],
   exports: [AuthService]
