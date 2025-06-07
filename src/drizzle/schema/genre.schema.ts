@@ -10,5 +10,5 @@ export const Genre = pgTable('Genre', {
 })
 
 export const genreRelations = relations(Genre, ({ one, many }) => ({
-  genres: many(Movie)
+  movies: many(Movie)
 }))

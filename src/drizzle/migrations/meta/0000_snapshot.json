@@ -1,5 +1,5 @@
 {
-  "id": "d16612ea-a9c7-4f3e-8653-5d7eeba94ad3",
+  "id": "fa60032d-ac28-43de-89af-8b7783f5b9c5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -161,7 +161,7 @@
         },
         "status": {
           "name": "status",
-          "type": "status",
+          "type": "reservation_status_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
@@ -309,7 +309,7 @@
         },
         "seat_type": {
           "name": "seat_type",
-          "type": "seat_type",
+          "type": "seat_status_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
@@ -566,7 +566,7 @@
         },
         "role": {
           "name": "role",
-          "type": "user_role",
+          "type": "user_role_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
@@ -611,24 +611,24 @@
     }
   },
   "enums": {
-    "public.status": {
-      "name": "status",
+    "public.reservation_status_type": {
+      "name": "reservation_status_type",
       "schema": "public",
       "values": [
         "CONFIRMED",
         "CANCELLED"
       ]
     },
-    "public.seat_type": {
-      "name": "seat_type",
+    "public.seat_status_type": {
+      "name": "seat_status_type",
       "schema": "public",
       "values": [
         "NORMAL",
         "VIP"
       ]
     },
-    "public.user_role": {
-      "name": "user_role",
+    "public.user_role_type": {
+      "name": "user_role_type",
       "schema": "public",
       "values": [
         "USER",

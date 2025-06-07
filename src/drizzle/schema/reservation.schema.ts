@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, decimal, timestamp, pgEnum } from 'drizzle-orm/pg-core'
+import { Reservation_Seat, User } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
-import { Reservation_Seat } from '~/drizzle/schema/reservation_seat.schema'
-import { Showtime } from '~/drizzle/schema/showtime.schema'
-import { User } from '~/drizzle/schema/user.schema'
 
-export const reservationStatusEnum = pgEnum('status', ['CONFIRMED', 'CANCELLED'])
+export const reservationStatus = ['CONFIRMED', 'CANCELLED'] as const
+export type ReservationStatusType = (typeof reservationStatus)[number]
+export const reservationStatusEnum = pgEnum('reservation_status_type', reservationStatus)
 
 export const Reservation = pgTable('Reservation', {
   id,

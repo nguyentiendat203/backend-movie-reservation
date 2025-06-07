@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, pgEnum, boolean as pgBoolean, decimal, varchar } from 'drizzle-orm/pg-core'
-import { Showtime } from '~/drizzle/schema'
+import { Reservation_Seat, Showtime, Temporary_Lock } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
-import { Reservation_Seat } from '~/drizzle/schema/reservation_seat.schema'
-import { Temporary_Lock } from '~/drizzle/schema/temporary_lock.schema'
 
-export const seatTypeEnum = pgEnum('seat_type', ['NORMAL', 'VIP'])
+export const seatTypes = ['NORMAL', 'VIP'] as const
+export type SeatType = (typeof seatTypes)[number]
+export const seatTypeEnum = pgEnum('seat_status_type', seatTypes)
 
 export const Seat = pgTable('Seat', {
   id,

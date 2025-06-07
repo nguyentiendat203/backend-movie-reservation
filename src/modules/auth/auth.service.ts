@@ -34,7 +34,7 @@ export class AuthService {
     }
     const user = await this.usersService.findOne(username)
     if (!user) {
-      throw new NotFoundException('User not found')
+      throw new NotFoundException('Email not found')
     }
     await this.verifyPlainContentWithHashedContent(pass, user.password)
     return user

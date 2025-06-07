@@ -1,8 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, primaryKey } from 'drizzle-orm/pg-core'
+import { Reservation, Seat } from '~/drizzle/schema'
 import { timestamps } from '~/drizzle/schema.helpers'
-import { Reservation } from '~/drizzle/schema/reservation.schema'
-import { Seat } from '~/drizzle/schema/seat.schema'
 
 export const Reservation_Seat = pgTable(
   'Reservation_Seat',

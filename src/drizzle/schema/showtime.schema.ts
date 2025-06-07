@@ -1,8 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, integer, timestamp, varchar } from 'drizzle-orm/pg-core'
-import { Seat } from '~/drizzle/schema'
+import { Movie, Seat } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
-import { Movie } from '~/drizzle/schema/movie.schema'
 
 export const Showtime = pgTable('Showtime', {
   id,

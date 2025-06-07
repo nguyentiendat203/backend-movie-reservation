@@ -35,9 +35,7 @@ export class UserService {
   }
 
   async findOne(email: string): Promise<IUser> {
-    console.log(email)
     const [user] = await db.select().from(User).where(eq(User.email, email))
-    console.log('user', user)
     return user
   }
 

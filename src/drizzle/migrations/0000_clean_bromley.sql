@@ -1,6 +1,6 @@
-CREATE TYPE "public"."status" AS ENUM('CONFIRMED', 'CANCELLED');--> statement-breakpoint
-CREATE TYPE "public"."seat_type" AS ENUM('NORMAL', 'VIP');--> statement-breakpoint
-CREATE TYPE "public"."user_role" AS ENUM('USER', 'ADMIN');--> statement-breakpoint
+CREATE TYPE "public"."reservation_status_type" AS ENUM('CONFIRMED', 'CANCELLED');--> statement-breakpoint
+CREATE TYPE "public"."seat_status_type" AS ENUM('NORMAL', 'VIP');--> statement-breakpoint
+CREATE TYPE "public"."user_role_type" AS ENUM('USER', 'ADMIN');--> statement-breakpoint
 CREATE TABLE "Genre" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(255) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE "Movie" (
 CREATE TABLE "Reservation" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
-	"status" "status" DEFAULT 'CONFIRMED',
+	"status" "reservation_status_type" DEFAULT 'CONFIRMED',
 	"total_price" numeric(10, 2) NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now()
@@ -43,7 +43,7 @@ CREATE TABLE "Seat" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"showtime_id" uuid NOT NULL,
 	"seat_name" varchar(255) NOT NULL,
-	"seat_type" "seat_type" DEFAULT 'NORMAL',
+	"seat_type" "seat_status_type" DEFAULT 'NORMAL',
 	"price" numeric(10, 2) NOT NULL,
 	"is_active" boolean DEFAULT true,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE "User" (
 	"last_name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"password" varchar(255) NOT NULL,
-	"role" "user_role" DEFAULT 'USER',
+	"role" "user_role_type" DEFAULT 'USER',
 	"refresh_token_hash" varchar(255),
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now(),

@@ -1,8 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, timestamp } from 'drizzle-orm/pg-core'
+import { Seat, User } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
-import { Seat } from '~/drizzle/schema/seat.schema'
-import { User } from '~/drizzle/schema/user.schema'
 
 export const Temporary_Lock = pgTable('Temporary_Lock', {
   id,

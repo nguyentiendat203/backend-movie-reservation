@@ -1,12 +1,11 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, varchar, pgEnum } from 'drizzle-orm/pg-core'
+import { Reservation, Temporary_Lock } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
-import { Reservation } from '~/drizzle/schema/reservation.schema'
-import { Temporary_Lock } from '~/drizzle/schema/temporary_lock.schema'
 
 export const userRoles = ['USER', 'ADMIN'] as const
 export type UserRole = (typeof userRoles)[number]
-export const userRoleEnum = pgEnum('user_role', userRoles)
+export const userRoleEnum = pgEnum('user_role_type', userRoles)
 
 export const User = pgTable('User', {
   id,

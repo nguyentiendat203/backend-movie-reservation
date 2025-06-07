@@ -47,8 +47,7 @@ export class AuthController {
   }
 
   @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(RolesGuard, JwtAccessTokenGuard)
   @Get()
   findAll() {
     return this.authService.findAll()
