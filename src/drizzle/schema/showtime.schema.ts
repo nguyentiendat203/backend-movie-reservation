@@ -1,16 +1,16 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, uuid, integer, timestamp, decimal } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, integer, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { Seat } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
 import { Movie } from '~/drizzle/schema/movie.schema'
-import { Room } from '~/drizzle/schema/room.schema'
-import { Temporary_Lock } from '~/drizzle/schema/temporary_lock.schema'
 
 export const Showtime = pgTable('Showtime', {
   id,
-  movie_id: uuid().references(() => Movie.id),
-  room_id: uuid().references(() => Room.id),
-  start_time: timestamp(),
-  ticket_price: decimal({ precision: 10, scale: 2 }),
+  movie_id: uuid().references(() => Movie.id, { onDelete: 'cascade' }),
+  start_time: timestamp({ withTimezone: true }).notNull(),
+  end_time: timestamp({ withTimezone: true }).notNull(),
+  capacity: integer().notNull(),
+  location: varchar({ length: 255 }).notNull(),
   ...timestamps
 })
 
@@ -19,9 +19,5 @@ export const showtimeRelations = relations(Showtime, ({ one, many }) => ({
     fields: [Showtime.movie_id],
     references: [Movie.id]
   }),
-  room: one(Room, {
-    fields: [Showtime.room_id],
-    references: [Room.id]
-  }),
-  temporaryLocks: many(Temporary_Lock)
+  seats: many(Seat)
 }))

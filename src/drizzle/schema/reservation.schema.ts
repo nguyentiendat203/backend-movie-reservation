@@ -12,7 +12,6 @@ export const Reservation = pgTable('Reservation', {
   user_id: uuid()
     .notNull()
     .references(() => User.id),
-  showtime_id: uuid().references(() => Showtime.id),
   status: reservationStatusEnum().default('CONFIRMED'),
   total_price: decimal({ precision: 10, scale: 2 }).notNull(),
   ...timestamps

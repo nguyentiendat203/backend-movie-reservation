@@ -1,5 +1,5 @@
 {
-  "id": "570a1f6f-7611-4a22-b422-efdb9b5d5110",
+  "id": "d16612ea-a9c7-4f3e-8653-5d7eeba94ad3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -69,12 +69,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "director": {
-          "name": "director",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "duration": {
           "name": "duration",
           "type": "integer",
@@ -86,13 +80,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
-        },
-        "rating": {
-          "name": "rating",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'4.0'"
         },
         "description": {
           "name": "description",
@@ -172,12 +159,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "showtime_id": {
-          "name": "showtime_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
         "status": {
           "name": "status",
           "type": "status",
@@ -215,19 +196,6 @@
           "tableTo": "User",
           "columnsFrom": [
             "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "Reservation_showtime_id_Showtime_id_fk": {
-          "name": "Reservation_showtime_id_Showtime_id_fk",
-          "tableFrom": "Reservation",
-          "tableTo": "Showtime",
-          "columnsFrom": [
-            "showtime_id"
           ],
           "columnsTo": [
             "id"
@@ -316,8 +284,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.Room": {
-      "name": "Room",
+    "public.Seat": {
+      "name": "Seat",
       "schema": "",
       "columns": {
         "id": {
@@ -327,23 +295,38 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "theater_id": {
-          "name": "theater_id",
+        "showtime_id": {
+          "name": "showtime_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "seat_name": {
+          "name": "seat_name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "seat_count": {
-          "name": "seat_count",
-          "type": "integer",
+        "seat_type": {
+          "name": "seat_type",
+          "type": "seat_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'NORMAL'"
+        },
+        "price": {
+          "name": "price",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
         },
         "created_at": {
           "name": "created_at",
@@ -362,79 +345,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "Room_theater_id_Theater_id_fk": {
-          "name": "Room_theater_id_Theater_id_fk",
-          "tableFrom": "Room",
-          "tableTo": "Theater",
-          "columnsFrom": [
-            "theater_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.Seat": {
-      "name": "Seat",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "room_id": {
-          "name": "room_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "row": {
-          "name": "row",
-          "type": "char(1)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "seat_number": {
-          "name": "seat_number",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "seat_type": {
-          "name": "seat_type",
-          "type": "seat_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'NORMAL'"
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "Seat_room_id_Room_id_fk": {
-          "name": "Seat_room_id_Room_id_fk",
+        "Seat_showtime_id_Showtime_id_fk": {
+          "name": "Seat_showtime_id_Showtime_id_fk",
           "tableFrom": "Seat",
-          "tableTo": "Room",
+          "tableTo": "Showtime",
           "columnsFrom": [
-            "room_id"
+            "showtime_id"
           ],
           "columnsTo": [
             "id"
@@ -466,23 +382,29 @@
           "primaryKey": false,
           "notNull": false
         },
-        "room_id": {
-          "name": "room_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
         "start_time": {
           "name": "start_time",
-          "type": "timestamp",
+          "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "ticket_price": {
-          "name": "ticket_price",
-          "type": "numeric(10, 2)",
+        "end_time": {
+          "name": "end_time",
+          "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "capacity": {
+          "name": "capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -511,20 +433,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "Showtime_room_id_Room_id_fk": {
-          "name": "Showtime_room_id_Room_id_fk",
-          "tableFrom": "Showtime",
-          "tableTo": "Room",
-          "columnsFrom": [
-            "room_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -547,12 +456,6 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "showtime_id": {
-          "name": "showtime_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -606,19 +509,6 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "Temporary_Lock_showtime_id_Showtime_id_fk": {
-          "name": "Temporary_Lock_showtime_id_Showtime_id_fk",
-          "tableFrom": "Temporary_Lock",
-          "tableTo": "Showtime",
-          "columnsFrom": [
-            "showtime_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
         "Temporary_Lock_seat_id_Seat_id_fk": {
           "name": "Temporary_Lock_seat_id_Seat_id_fk",
           "tableFrom": "Temporary_Lock",
@@ -633,52 +523,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.Theater": {
-      "name": "Theater",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "location": {
-          "name": "location",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -722,11 +566,17 @@
         },
         "role": {
           "name": "role",
-          "type": "role",
+          "type": "user_role",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
           "default": "'USER'"
+        },
+        "refresh_token_hash": {
+          "name": "refresh_token_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -777,8 +627,8 @@
         "VIP"
       ]
     },
-    "public.role": {
-      "name": "role",
+    "public.user_role": {
+      "name": "user_role",
       "schema": "public",
       "values": [
         "USER",

@@ -7,10 +7,8 @@ import { Showtime } from '~/drizzle/schema/showtime.schema'
 export const Movie = pgTable('Movie', {
   id,
   title: varchar({ length: 255 }).notNull(),
-  director: varchar({ length: 255 }).notNull(),
   duration: integer().notNull(),
   poster: varchar({ length: 255 }).notNull(),
-  rating: decimal({ precision: 10, scale: 2 }).default('4.0'),
   description: text(),
   genre_id: uuid()
     .notNull()

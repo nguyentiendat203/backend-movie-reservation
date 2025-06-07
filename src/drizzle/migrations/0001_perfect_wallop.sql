@@ -1,1 +1,0 @@
-ALTER TABLE "User" ADD COLUMN "refresh_token_hash" varchar(255);
