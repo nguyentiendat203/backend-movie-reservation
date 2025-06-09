@@ -80,7 +80,6 @@ export class AuthService {
 
   async getUserIfRefreshTokenMatched(userId: string, refreshToken: string) {
     try {
-      console.log(userId, refreshToken)
       const [user] = await db.select().from(User).where(eq(User.id, userId))
       if (!user) {
         throw new UnauthorizedException()

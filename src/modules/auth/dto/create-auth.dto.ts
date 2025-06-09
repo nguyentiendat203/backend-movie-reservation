@@ -2,7 +2,8 @@ import { IsEmail, IsNotEmpty, IsString, MinLength, IsEnum, IsOptional } from 'cl
 
 export enum UserRole {
   USER = 'USER',
-  ADMIN = 'ADMIN'
+  ADMIN = 'ADMIN',
+  STAFF = 'STAFF'
 }
 
 export class CreateAuthDto {

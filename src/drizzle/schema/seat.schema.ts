@@ -14,7 +14,7 @@ export const Seat = pgTable('Seat', {
     .references(() => Showtime.id),
   seat_name: varchar({ length: 255 }).notNull(),
   seat_type: seatTypeEnum().default('NORMAL'),
-  price: decimal({ precision: 10, scale: 2 }).notNull(),
+  price: decimal({ precision: 10, scale: 2 }).notNull().default('50000.00'),
   is_active: pgBoolean().default(true),
   ...timestamps
 })

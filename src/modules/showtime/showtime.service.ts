@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { CreateShowtimeDto } from './dto/create-showtime.dto';
-import { UpdateShowtimeDto } from './dto/update-showtime.dto';
+import { Injectable } from '@nestjs/common'
+import { CreateShowtimeDto } from './dto/create-showtime.dto'
+import { UpdateShowtimeDto } from './dto/update-showtime.dto'
+import { db } from '~/drizzle/db'
+import { Seat, Showtime } from '~/drizzle/schema'
 
 @Injectable()
 export class ShowtimeService {
-  create(createShowtimeDto: CreateShowtimeDto) {
-    return 'This action adds a new showtime';
+  async create(createShowtimeDto: CreateShowtimeDto) {
+    const { capacity, ...rest } = createShowtimeDto
+
+    // Step 1: Insert Showtime & get inserted ID
+    const [showtime] = await db
+      .insert(Showtime)
+      .values({
+        ...rest,
+        start_time: new Date(createShowtimeDto.start_time),
+        end_time: new Date(createShowtimeDto.end_time),
+        capacity
+      })
+      .returning({ id: Showtime.id })
+
+    // Step 2: Auto create seats
+    const seats = Array.from({ length: capacity }).map((_, index) => ({
+      showtime_id: showtime.id,
+      seat_name: `Seat ${index + 1}`,
+      is_active: true
+    }))
+    await db.insert(Seat).values(seats)
+
+    return { message: 'Showtime & Seats created successfully' }
   }
 
   findAll() {
-    return `This action returns all showtime`;
+    return `This action returns all showtime`
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} showtime`;
+    return `This action returns a #${id} showtime`
   }
 
   update(id: number, updateShowtimeDto: UpdateShowtimeDto) {
-    return `This action updates a #${id} showtime`;
+    return `This action updates a #${id} showtime`
   }
 
   remove(id: number) {
-    return `This action removes a #${id} showtime`;
+    return `This action removes a #${id} showtime`
   }
 }

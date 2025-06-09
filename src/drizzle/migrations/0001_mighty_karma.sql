@@ -1,0 +1,1 @@
+ALTER TABLE "Showtime" ALTER COLUMN "capacity" SET DEFAULT 0;
