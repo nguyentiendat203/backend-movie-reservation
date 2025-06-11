@@ -1,11 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { CreateAuthDto } from '~/modules/auth/dto/create-auth.dto'
+import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('reservations')
+  findShowtimesOfUser(@Request() req) {
+    return this.userService.findShowtimesOfUser(req.user)
+  }
 
   @Post()
   create(@Body() body: CreateAuthDto) {

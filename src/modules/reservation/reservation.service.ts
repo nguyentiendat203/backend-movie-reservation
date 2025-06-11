@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { UpdateReservationDto } from './dto/update-reservation.dto'
 import { IUser } from '~/modules/user/interfaces/user.interface'
 import { db } from '~/drizzle/db'
@@ -47,6 +47,7 @@ export class ReservationService {
         .insert(Reservation)
         .values({
           user_id: user.id,
+          showtime_id,
           total_price: total_price.toFixed(2)
         })
         .returning()
@@ -64,6 +65,37 @@ export class ReservationService {
         reservation_id: reservation.id
       }
     })
+  }
+
+  async cancelShowtimeResered(reser_id: string) {
+    // 1. Find Reservation
+    const reservation = await db.query.Reservation.findFirst({
+      where: (Reservation, { eq }) => eq(Reservation.id, reser_id),
+      with: {
+        showtime: {
+          columns: {
+            start_time: true
+          }
+        }
+      }
+    })
+
+    if (!reservation) {
+      throw new NotFoundException('Reservation not found')
+    }
+
+    const startTime = new Date(reservation.showtime.start_time)
+    const now = new Date()
+    if (startTime <= now) {
+      throw new BadRequestException('Cannot cancel past or ongoing reservations')
+    }
+
+    await db.update(Reservation).set({ status: 'CANCELLED' }).where(eq(Reservation.id, reser_id))
+
+    return {
+      message: 'Reservation cancelled successfully',
+      reservation_id: reser_id
+    }
   }
 
   async create(showtime_id: string) {

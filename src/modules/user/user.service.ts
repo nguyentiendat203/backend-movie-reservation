@@ -30,6 +30,25 @@ export class UserService {
       .where(eq(User.id, user_id))
   }
 
+  async findShowtimesOfUser(user: IUser) {
+    const results = await db.query.Reservation.findMany({
+      where: (Reservation, { eq }) => eq(Reservation.user_id, user.id),
+      with: {
+        showtime: true,
+        reservationSeats: {
+          columns: {
+            seat_id: true
+          },
+          with: {
+            seat: true
+          }
+        }
+      }
+    })
+
+    return results
+  }
+
   findAll() {
     return `This action returns all user`
   }

@@ -20,6 +20,11 @@ export class ReservationController {
     return this.reservationService.create(showtime_id)
   }
 
+  @Patch('cancel/:reser_id')
+  cancelShowtimeResered(@Param('reser_id') reser_id: string) {
+    return this.reservationService.cancelShowtimeResered(reser_id)
+  }
+
   @Get()
   findAll() {
     return this.reservationService.findAll()

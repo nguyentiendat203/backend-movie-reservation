@@ -33,6 +33,18 @@ export class ShowtimeController {
     return this.showtimeService.findAllShowtimeOfMovie(movie_id)
   }
 
+  @Public()
+  @Get('seats/available/:showtime_id')
+  findSeatsAvailableOfShowtime(@Param('showtime_id') showtime_id: string) {
+    return this.showtimeService.findSeatsAvailableOfShowtime(showtime_id)
+  }
+
+  @Public()
+  @Get('seats/:showtime_id')
+  findSeatsBelongShowtime(@Param('showtime_id') showtime_id: string) {
+    return this.showtimeService.findSeatsBelongShowtime(showtime_id)
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.showtimeService.findOne(+id)
