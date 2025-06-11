@@ -31,6 +31,12 @@ export class ShowtimeService {
     return { message: 'Showtime & Seats created successfully' }
   }
 
+  async findAllShowtimeOfMovie(movie_id: string) {
+    return await db.query.Showtime.findMany({
+      where: (Showtime, { eq }) => eq(Showtime.movie_id, movie_id)
+    })
+  }
+
   findAll() {
     return `This action returns all showtime`
   }

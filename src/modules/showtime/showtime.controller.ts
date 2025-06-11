@@ -6,22 +6,31 @@ import { Roles } from '~/decorators/role.decorator'
 import { RolesGuard } from '~/modules/auth/guards/roles.guard'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 import { UserRole } from '~/modules/auth/dto/create-auth.dto'
+import { Public } from '~/decorators/auth.decorator'
 
+@UseGuards(JwtAccessTokenGuard)
 @Controller('showtime')
 export class ShowtimeController {
   constructor(private readonly showtimeService: ShowtimeService) {}
 
   @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
-  @UseGuards(JwtAccessTokenGuard)
   @Post()
   create(@Body() createShowtimeDto: CreateShowtimeDto) {
     return this.showtimeService.create(createShowtimeDto)
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.showtimeService.findAll()
+  }
+
+  @Public()
+  @Get(':movie_id')
+  findAllShowtimeOfMovie(@Param('movie_id') movie_id: string) {
+    return this.showtimeService.findAllShowtimeOfMovie(movie_id)
   }
 
   @Get(':id')
