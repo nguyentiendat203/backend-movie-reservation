@@ -64,12 +64,20 @@ export class ShowtimeService {
     })
   }
 
-  findAll() {
-    return `This action returns all showtime`
+  async findAll() {
+    return await db.query.Showtime.findMany({})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} showtime`
+  async findOne(showtime_id: string) {
+    const showtime = await db.query.Showtime.findFirst({
+      where: (Showtime, { eq }) => eq(Showtime.id, showtime_id)
+    })
+
+    const seats = await db.query.Seat.findMany({
+      where: (Seat, { eq }) => eq(Seat.showtime_id, showtime_id)
+    })
+
+    return { ...showtime, seats }
   }
 
   update(id: number, updateShowtimeDto: UpdateShowtimeDto) {

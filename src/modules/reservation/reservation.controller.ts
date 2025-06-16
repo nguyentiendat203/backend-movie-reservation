@@ -4,6 +4,9 @@ import { UpdateReservationDto } from './dto/update-reservation.dto'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 import { CreateReservationDto } from '~/modules/reservation/dto/create-reservation.dto'
 import { IReservation } from '~/modules/reservation/interfaces/reservation.interface'
+import { RolesGuard } from '~/modules/auth/guards/roles.guard'
+import { Roles } from '~/decorators/role.decorator'
+import { Role } from '~/common/types'
 
 @Controller('reservation')
 export class ReservationController {
@@ -11,7 +14,7 @@ export class ReservationController {
 
   @UseGuards(JwtAccessTokenGuard)
   @Post()
-  reserShowtime(@Request() req, @Body() body: IReservation) {
+  reserShowtime(@Request() req, @Body() body: CreateReservationDto) {
     return this.reservationService.reserShowtime(req.user, body)
   }
 
@@ -25,6 +28,9 @@ export class ReservationController {
     return this.reservationService.cancelShowtimeResered(reser_id)
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAccessTokenGuard)
   @Get()
   findAll() {
     return this.reservationService.findAll()

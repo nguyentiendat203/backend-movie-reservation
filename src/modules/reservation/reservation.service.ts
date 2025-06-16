@@ -2,9 +2,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { UpdateReservationDto } from './dto/update-reservation.dto'
 import { IUser } from '~/modules/user/interfaces/user.interface'
 import { db } from '~/drizzle/db'
-import { Reservation, Reservation_Seat, Seat, Showtime, User } from '~/drizzle/schema'
+import { Reservation, Reservation_Seat, Seat } from '~/drizzle/schema'
 import { and, eq, inArray, lt, sql } from 'drizzle-orm'
-import { CreateReservationDto } from '~/modules/reservation/dto/create-reservation.dto'
 import { IReservation } from '~/modules/reservation/interfaces/reservation.interface'
 
 @Injectable()
@@ -28,13 +27,13 @@ export class ReservationService {
 
       // 3. Check seats have already been reserved
       const reservedSeats = await tx
-        .select({ seat_id: Reservation_Seat.seat_id })
+        .select({ seat_id: Reservation_Seat.seat_id, seat_name: Seat.seat_name })
         .from(Reservation_Seat)
         .innerJoin(Seat, eq(Seat.id, Reservation_Seat.seat_id))
         .where(and(inArray(Reservation_Seat.seat_id, seat_ids), eq(Seat.showtime_id, showtime_id)))
 
       if (reservedSeats.length > 0) {
-        throw new BadRequestException('One or more seats have already been reserved')
+        throw new BadRequestException(`Seats already reserved: ${reservedSeats.map((r) => r.seat_name).join(', ')}`)
       }
 
       // 4. Calculate total price
@@ -102,8 +101,19 @@ export class ReservationService {
     const seats = await db.select().from(Seat).where(eq(Seat.showtime_id, showtime_id))
     return { seats }
   }
-  findAll() {
-    return `This action returns all reservation`
+
+  async findAll() {
+    return await db.query.Reservation.findMany({
+      with: {
+        showtime: {
+          columns: {
+            id: false,
+            created_at: false,
+            updated_at: false
+          }
+        }
+      }
+    })
   }
 
   findOne(id: number) {

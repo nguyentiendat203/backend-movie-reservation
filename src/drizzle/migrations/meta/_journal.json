@@ -29,6 +29,20 @@
       "when": 1749620911660,
       "tag": "0003_short_paibok",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749785451187,
+      "tag": "0004_tricky_abomination",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1750054980714,
+      "tag": "0005_third_thanos",
+      "breakpoints": true
     }
   ]
 }

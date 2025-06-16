@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, integer, timestamp, varchar } from 'drizzle-orm/pg-core'
-import { Movie, Reservation, Seat } from '~/drizzle/schema'
+import { Movie, Reservation, Seat, Temporary_Lock } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
 
 export const Showtime = pgTable('Showtime', {
@@ -19,5 +19,6 @@ export const showtimeRelations = relations(Showtime, ({ one, many }) => ({
     references: [Movie.id]
   }),
   reservation: one(Reservation),
+  temporaryLocks: many(Temporary_Lock),
   seats: many(Seat)
 }))

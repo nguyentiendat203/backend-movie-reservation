@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, uuid, timestamp } from 'drizzle-orm/pg-core'
-import { Seat, User } from '~/drizzle/schema'
+import { Seat, Showtime, User } from '~/drizzle/schema'
 import { id, timestamps } from '~/drizzle/schema.helpers'
 
 export const Temporary_Lock = pgTable('Temporary_Lock', {
@@ -8,6 +8,9 @@ export const Temporary_Lock = pgTable('Temporary_Lock', {
   user_id: uuid()
     .notNull()
     .references(() => User.id),
+  showtime_id: uuid()
+    .notNull()
+    .references(() => Showtime.id),
   seat_id: uuid()
     .notNull()
     .references(() => Seat.id),
@@ -17,6 +20,10 @@ export const Temporary_Lock = pgTable('Temporary_Lock', {
 })
 
 export const temporaryLockRelations = relations(Temporary_Lock, ({ one, many }) => ({
+  showtime: one(Showtime, {
+    fields: [Temporary_Lock.showtime_id],
+    references: [Showtime.id]
+  }),
   seat: one(Seat, {
     fields: [Temporary_Lock.seat_id],
     references: [Seat.id]

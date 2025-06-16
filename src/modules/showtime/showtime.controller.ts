@@ -28,7 +28,7 @@ export class ShowtimeController {
   }
 
   @Public()
-  @Get(':movie_id')
+  @Get('movie/:movie_id')
   findAllShowtimeOfMovie(@Param('movie_id') movie_id: string) {
     return this.showtimeService.findAllShowtimeOfMovie(movie_id)
   }
@@ -47,7 +47,7 @@ export class ShowtimeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.showtimeService.findOne(+id)
+    return this.showtimeService.findOne(id)
   }
 
   @Patch(':id')
