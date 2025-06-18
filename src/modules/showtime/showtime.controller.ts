@@ -20,8 +20,6 @@ export class ShowtimeController {
     return this.showtimeService.create(createShowtimeDto)
   }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.showtimeService.findAll()
@@ -50,13 +48,17 @@ export class ShowtimeController {
     return this.showtimeService.findOne(id)
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateShowtimeDto: UpdateShowtimeDto) {
-    return this.showtimeService.update(+id, updateShowtimeDto)
+    return this.showtimeService.update(id, updateShowtimeDto)
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.showtimeService.remove(+id)
+    return this.showtimeService.remove(id)
   }
 }

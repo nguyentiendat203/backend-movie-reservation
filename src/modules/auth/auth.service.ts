@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { CreateAuthDto } from './dto/create-auth.dto'
-import { UpdateAuthDto } from './dto/update-auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UserService } from '../user/user.service'
 import * as bcrypt from 'bcrypt'
@@ -12,6 +11,8 @@ import { User } from '~/drizzle/schema'
 import { eq, sql } from 'drizzle-orm'
 import { hashString } from '~/utils/utils'
 import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
+import { id } from '~/drizzle/schema.helpers'
+import { an } from '@faker-js/faker/dist/airline-BUL6NtOJ'
 
 @Injectable()
 export class AuthService {
@@ -119,19 +120,11 @@ export class AuthService {
     return { payload, hashedPassWord }
   }
 
-  findAll() {
-    return `This action returns all auth`
-  }
-
-  async findOne(id: number) {
-    return `This action findOne #${id} auth`
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`
+  async getProfile(userId: string) {
+    const user = await db.query.User.findFirst({
+      where: (User, { eq }) => eq(User.id, userId)
+    })
+    const { password, refresh_token_hash, ...rest } = user as IUser
+    return rest
   }
 }

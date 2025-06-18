@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { UpdateUserDto } from './dto/update-user.dto'
 import { db } from '~/drizzle/db'
 import { User } from '~/drizzle/schema'
-import { eq, sql } from 'drizzle-orm'
+import { and, eq, isNull, sql } from 'drizzle-orm'
 import { CreateAuthDto } from '~/modules/auth/dto/create-auth.dto'
 import { IUser } from '~/modules/user/interfaces/user.interface'
 import { hashString } from '~/utils/utils'
+import { UpdateAuthDto } from '~/modules/auth/dto/update-auth.dto'
 
 @Injectable()
 export class UserService {
@@ -30,39 +30,34 @@ export class UserService {
       .where(eq(User.id, user_id))
   }
 
-  async findShowtimesOfUser(user: IUser) {
-    const results = await db.query.Reservation.findMany({
-      where: (Reservation, { eq }) => eq(Reservation.user_id, user.id),
-      with: {
-        showtime: true,
-        reservationSeats: {
-          columns: {
-            seat_id: true
-          },
-          with: {
-            seat: true
-          }
-        }
-      }
+  async findAll() {
+    return await db.query.User.findMany({
+      where: (User, { isNull }) => isNull(User.deleted_at)
     })
-
-    return results
-  }
-
-  findAll() {
-    return `This action returns all user`
   }
 
   async findOne(email: string): Promise<IUser> {
-    const [user] = await db.select().from(User).where(eq(User.email, email))
+    const [user] = await db
+      .select()
+      .from(User)
+      .where(and(eq(User.email, email), isNull(User.deleted_at)))
     return user
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`
+  async update(id: string, updateAuthDto: UpdateAuthDto) {
+    const [result] = await db
+      .update(User)
+      .set({ ...updateAuthDto, updated_at: sql`NOW()` })
+      .where(eq(User.id, id))
+      .returning({ user_id: User.id })
+    return { ...result, message: 'Update succesfully' }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`
+  async remove(id: string) {
+    await db
+      .update(User)
+      .set({ deleted_at: sql`NOW()` })
+      .where(eq(User.id, id))
+    return { message: 'Delete succesfully' }
   }
 }

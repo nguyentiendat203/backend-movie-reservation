@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { CreateShowtimeDto } from './dto/create-showtime.dto'
 import { UpdateShowtimeDto } from './dto/update-showtime.dto'
 import { db } from '~/drizzle/db'
-import { Reservation_Seat, Seat, Showtime } from '~/drizzle/schema'
+import { Seat, Showtime } from '~/drizzle/schema'
+import { eq, isNull, sql } from 'drizzle-orm'
 
 @Injectable()
 export class ShowtimeService {
@@ -33,7 +34,7 @@ export class ShowtimeService {
 
   async findAllShowtimeOfMovie(movie_id: string) {
     return await db.query.Showtime.findMany({
-      where: (Showtime, { eq }) => eq(Showtime.movie_id, movie_id)
+      where: (Showtime, { eq, and, isNull }) => and(eq(Showtime.movie_id, movie_id), isNull(Showtime.deleted_at))
     })
   }
 
@@ -65,7 +66,7 @@ export class ShowtimeService {
   }
 
   async findAll() {
-    return await db.query.Showtime.findMany({})
+    return await db.select().from(Showtime).where(isNull(Showtime.deleted_at))
   }
 
   async findOne(showtime_id: string) {
@@ -80,11 +81,20 @@ export class ShowtimeService {
     return { ...showtime, seats }
   }
 
-  update(id: number, updateShowtimeDto: UpdateShowtimeDto) {
-    return `This action updates a #${id} showtime`
+  async update(id: string, updateShowtimeDto: UpdateShowtimeDto) {
+    const [result] = await db
+      .update(Showtime)
+      .set({ ...updateShowtimeDto, updated_at: sql`NOW()` })
+      .where(eq(Showtime.id, id))
+      .returning({ showtime_id: Showtime.id })
+    return { ...result, message: 'Update Showtime succesfully' }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} showtime`
+  async remove(id: string) {
+    await db
+      .update(Showtime)
+      .set({ deleted_at: sql`NOW()` })
+      .where(eq(Showtime.id, id))
+    return { message: 'Delete succesfully' }
   }
 }

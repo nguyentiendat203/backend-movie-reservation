@@ -1,4 +1,4 @@
-import { IsUUID, IsNotEmpty, IsDateString, IsInt, Min, MaxLength, Validate } from 'class-validator'
+import { IsNotEmpty, IsDateString, IsInt, Min, MaxLength, Validate } from 'class-validator'
 import { IsEndTimeAfterStartTime } from '~/modules/showtime/dto/validators'
 
 export class CreateShowtimeDto {
@@ -7,12 +7,12 @@ export class CreateShowtimeDto {
 
   @IsDateString()
   @IsNotEmpty()
-  start_time: string
+  start_time: Date
 
   @IsDateString()
   @IsNotEmpty()
   @Validate(IsEndTimeAfterStartTime)
-  end_time: string
+  end_time: Date
 
   @IsInt()
   @Min(1)

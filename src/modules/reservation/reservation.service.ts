@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { UpdateReservationDto } from './dto/update-reservation.dto'
 import { IUser } from '~/modules/user/interfaces/user.interface'
 import { db } from '~/drizzle/db'
 import { Reservation, Reservation_Seat, Seat } from '~/drizzle/schema'
-import { and, eq, inArray, lt, sql } from 'drizzle-orm'
+import { and, eq, inArray } from 'drizzle-orm'
 import { IReservation } from '~/modules/reservation/interfaces/reservation.interface'
 
 @Injectable()
@@ -66,6 +65,25 @@ export class ReservationService {
     })
   }
 
+  async findMyReservation(user: IUser) {
+    const results = await db.query.Reservation.findMany({
+      where: (Reservation, { eq }) => eq(Reservation.user_id, user.id),
+      with: {
+        showtime: true,
+        reservationSeats: {
+          columns: {
+            seat_id: true
+          },
+          with: {
+            seat: true
+          }
+        }
+      }
+    })
+
+    return results
+  }
+
   async cancelShowtimeResered(reser_id: string) {
     // 1. Find Reservation
     const reservation = await db.query.Reservation.findFirst({
@@ -108,23 +126,19 @@ export class ReservationService {
         showtime: {
           columns: {
             id: false,
-            created_at: false,
             updated_at: false
+          }
+        },
+        user: {
+          columns: {
+            id: false,
+            updated_at: false,
+            deleted_at: false,
+            password: false,
+            refresh_token_hash: false
           }
         }
       }
     })
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} reservation`
-  }
-
-  update(id: number, updateReservationDto: UpdateReservationDto) {
-    return `This action updates a #${id} reservation`
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} reservation`
   }
 }

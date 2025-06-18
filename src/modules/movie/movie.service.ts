@@ -2,8 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { db } from '~/drizzle/db'
-import { Movie, Genre } from '~/drizzle/schema'
-import { eq, sql } from 'drizzle-orm'
+import { Movie } from '~/drizzle/schema'
+import { asc, count, eq, isNull, sql } from 'drizzle-orm'
+import { MoviesFilter } from '~/modules/movie/interfaces/movie.interface'
 
 @Injectable()
 export class MovieService {
@@ -12,16 +13,41 @@ export class MovieService {
     return 'Create new movie successfully'
   }
 
-  async findAll() {
-    return await db.query.Movie.findMany({
+  async findAll(page: number, limit: number, filter: MoviesFilter) {
+    const { category, title } = filter
+    const offset = (page - 1) * limit
+
+    const movies = await db.query.Movie.findMany({
+      limit,
+      offset,
+      where: (movie, { eq, ilike, and }) => {
+        if (category) {
+          return and(eq(movie.genre_id, category), isNull(Movie.deleted_at))
+        }
+        if (title) {
+          return and(ilike(movie.title, `%${title}%`), isNull(Movie.deleted_at))
+        }
+        return isNull(Movie.deleted_at)
+      },
       with: {
         genre: {
           columns: {
             name: true
           }
         }
-      }
+      },
+      orderBy: [asc(Movie.created_at)]
     })
+
+    const [totalResult] = await db.select({ count: count() }).from(Movie).where(isNull(Movie.deleted_at))
+
+    return {
+      page,
+      limit,
+      totalPages: Math.ceil(totalResult?.count / limit),
+      totalRecords: totalResult?.count,
+      data: movies
+    }
   }
 
   async findAllByGenre(genre_id: string) {
@@ -55,7 +81,10 @@ export class MovieService {
   }
 
   async remove(id: string) {
-    await db.delete(Movie).where(eq(Movie.id, id))
+    await db
+      .update(Movie)
+      .set({ deleted_at: sql`NOW()` })
+      .where(eq(Movie.id, id))
     return { message: 'Delete movie succesfully' }
   }
 }

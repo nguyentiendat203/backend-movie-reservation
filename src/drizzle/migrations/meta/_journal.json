@@ -43,6 +43,13 @@
       "when": 1750054980714,
       "tag": "0005_third_thanos",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1750230177239,
+      "tag": "0006_sticky_forge",
+      "breakpoints": true
     }
   ]
 }

@@ -1,10 +1,10 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common'
 import { CreateSeatDto } from './dto/create-seat.dto'
 import { UpdateSeatDto } from './dto/update-seat.dto'
 import { CreateReservationDto } from '~/modules/reservation/dto/create-reservation.dto'
 import { db } from '~/drizzle/db'
-import { Reservation_Seat, Seat, Temporary_Lock } from '~/drizzle/schema'
-import { and, eq, inArray, lt } from 'drizzle-orm'
+import { Seat, Temporary_Lock } from '~/drizzle/schema'
+import { eq, lt, sql } from 'drizzle-orm'
+import { ConflictException, Injectable } from '@nestjs/common'
 
 const LOCK_DURATION_MINUTES = 5
 
@@ -14,12 +14,10 @@ export class SeatService {
     return 'This action adds a new seat'
   }
 
-  findAll() {
-    return `This action returns all seat`
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} seat`
+  async findAll() {
+    return await db.query.Seat.findMany({
+      where: (Seat, { isNull }) => isNull(Seat.deleted_at)
+    })
   }
 
   async lockSeats(userId: string, body: CreateReservationDto) {
@@ -54,11 +52,20 @@ export class SeatService {
     return { message: 'Seats locked successfully' }
   }
 
-  update(id: number, updateSeatDto: UpdateSeatDto) {
-    return `This action updates a #${id} seat`
+  async update(id: string, updateSeatDto: UpdateSeatDto) {
+    const [result] = await db
+      .update(Seat)
+      .set({ ...updateSeatDto, updated_at: sql`NOW()` })
+      .where(eq(Seat.id, id))
+      .returning({ seat_id: Seat.id })
+    return { ...result, message: 'Update succesfully' }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} seat`
+  async remove(id: string) {
+    await db
+      .update(Seat)
+      .set({ deleted_at: sql`NOW()` })
+      .where(eq(Seat.id, id))
+    return { message: 'Delete succesfully' }
   }
 }
