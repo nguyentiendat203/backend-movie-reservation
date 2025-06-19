@@ -23,12 +23,87 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Build a Movie Reservation System allows users to books seats for a showtime.
+
+## Features
+
+### 🔐 User Authentication and Authorization (JWT).
+✅ Register
+- Users can register by providing email and password. Passwords are securely hashed before being stored in the database.
+
+✅ Login
+- Users log in with their email and password. If valid, the server returns:
+  - access_token: short-lived token used to access protected APIs.
+  - refresh_token: long-lived token used to obtain new access tokens.
+- Refresh tokens are stored securely in the database and sent to the client.
+- Admin could be able to delete user.
+- Users could be able to their credentials.
+
+🔄 Refresh Access Token
+- Clients can send a valid refresh_token to receive a new access_token without re-entering credentials.
+
+❌ Logout
+- The refresh token is deleted from the database to log the user out securely.
+
+🔑 Forgot Password
+- Users can request a password reset by providing their email. A special access token is sent via email.
+
+🔁 Reset Password
+- Users provide a new password and valid token from email. If valid, the password is updated.
+
+### 📺 Showtime Management.
+- Admin could be able to create, update, delete and get all showtimes.
+- User could be able to filter showtime by movie.
+- User could be able to filter all seats belonging to a showitme.
+
+### 🎬 Movie Management.
+- Admin could be able to create, update and delete movies.
+- Movies are categorized by genre.
+- Users can view detailed information of the movie.
+  
+### 🧾 Reservation Management.
+- Admin could be able to get all reservations.
+- User could be able to reserve seats for a showtime, see the available seats and select the seats they want.
+- Users could be able to see their reservations and cancel them (only upcoming ones).
+
+### 💺 Seat Management.
+- Admin could be able to update, delete and get all seats.
+- User could be able to filter all seats belonging to a showitme.
+- Implement avoid overbooking seats.
 
 ## Project setup
 
 ```bash
+# Install dependencies
 $ npm install
+
+# Run docker container
+$ docker compose up
+```
+
+## Env file
+
+```bash
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_HOST=
+DB_PORT=
+
+LOCAL_DEV_APP_PORT=
+
+ACCESS_TOKEN_SECRET=
+REFRESH_TOKEN_SECRET=
+
+MAILER_HOST=
+MAILER_PORT=
+MAILER_USER=
+MAILER_PASSWORD=
+MAILER_SECURE=
+
+SMTP_USER=
+SMTP_PASS=
+
 ```
 
 ## Compile and run the project
@@ -44,54 +119,10 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
