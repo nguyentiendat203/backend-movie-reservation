@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ParseUUIDPipe } from '@nestjs/common'
 import { ReservationService } from './reservation.service'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 import { CreateReservationDto } from '~/modules/reservation/dto/create-reservation.dto'
@@ -24,7 +24,7 @@ export class ReservationController {
 
   @UseGuards(JwtAccessTokenGuard)
   @Patch('cancel/:reser_id')
-  cancelShowtimeResered(@Param('reser_id') reser_id: string) {
+  cancelShowtimeResered(@Param('reser_id', ParseUUIDPipe) reser_id: string) {
     return this.reservationService.cancelShowtimeResered(reser_id)
   }
 

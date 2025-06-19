@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ParseUUIDPipe } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateAuthDto } from '~/modules/auth/dto/create-auth.dto'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
@@ -24,14 +24,9 @@ export class UserController {
     return this.userService.findAll()
   }
 
-  @Get(':email')
-  findOne(@Param('email') email: string) {
-    return this.userService.findOne(email)
-  }
-
   @UseGuards(JwtAccessTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateAuthDto: UpdateAuthDto) {
     return this.userService.update(id, updateAuthDto)
   }
 
@@ -39,7 +34,7 @@ export class UserController {
   @UseGuards(RolesGuard)
   @UseGuards(JwtAccessTokenGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.remove(id)
   }
 }

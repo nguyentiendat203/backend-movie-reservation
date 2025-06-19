@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common'
+import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Request, ParseUUIDPipe } from '@nestjs/common'
 import { SeatService } from './seat.service'
 import { UpdateSeatDto } from './dto/update-seat.dto'
 import { CreateReservationDto } from '~/modules/reservation/dto/create-reservation.dto'
@@ -27,14 +27,14 @@ export class SeatController {
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSeatDto: UpdateSeatDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateSeatDto: UpdateSeatDto) {
     return this.seatService.update(id, updateSeatDto)
   }
 
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.seatService.remove(id)
   }
 }

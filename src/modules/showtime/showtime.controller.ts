@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common'
 import { ShowtimeService } from './showtime.service'
 import { CreateShowtimeDto } from './dto/create-showtime.dto'
 import { UpdateShowtimeDto } from './dto/update-showtime.dto'
@@ -29,38 +29,38 @@ export class ShowtimeController {
 
   @Public()
   @Get('movie/:movie_id')
-  findAllShowtimeOfMovie(@Param('movie_id') movie_id: string) {
+  findAllShowtimeOfMovie(@Param('movie_id', ParseUUIDPipe) movie_id: string) {
     return this.showtimeService.findAllShowtimeOfMovie(movie_id)
   }
 
   @Public()
   @Get('seats/available/:showtime_id')
-  findSeatsAvailableOfShowtime(@Param('showtime_id') showtime_id: string) {
+  findSeatsAvailableOfShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
     return this.showtimeService.findSeatsAvailableOfShowtime(showtime_id)
   }
 
   @Public()
   @Get('seats/:showtime_id')
-  findSeatsBelongShowtime(@Param('showtime_id') showtime_id: string) {
+  findSeatsBelongShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
     return this.showtimeService.findSeatsBelongShowtime(showtime_id)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.showtimeService.findOne(id)
   }
 
   @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShowtimeDto: UpdateShowtimeDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateShowtimeDto: UpdateShowtimeDto) {
     return this.showtimeService.update(id, updateShowtimeDto)
   }
 
   @Roles(UserRole.ADMIN)
   @UseGuards(RolesGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.showtimeService.remove(id)
   }
 }
