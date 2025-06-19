@@ -23,6 +23,12 @@ export class AuthController {
     return this.authService.login(req.user)
   }
 
+  @UseGuards(JwtAccessTokenGuard)
+  @Patch('logout')
+  async logout(@Request() req) {
+    return this.authService.logout(req.user)
+  }
+
   @UseGuards(JwtRefreshTokenGuard)
   @Post('refresh')
   async refreshAccessToken(@Request() req) {

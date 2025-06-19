@@ -1,0 +1,1 @@
+ALTER TABLE "Movie" DROP COLUMN "release_date";

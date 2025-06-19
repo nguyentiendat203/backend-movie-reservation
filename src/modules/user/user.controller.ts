@@ -35,6 +35,9 @@ export class UserController {
     return this.userService.update(id, updateAuthDto)
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAccessTokenGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id)

@@ -22,11 +22,6 @@ export class ReservationController {
     return this.reservationService.findMyReservation(req.user)
   }
 
-  @Get(':showtime_id')
-  create(@Param('showtime_id') showtime_id: string) {
-    return this.reservationService.create(showtime_id)
-  }
-
   @UseGuards(JwtAccessTokenGuard)
   @Patch('cancel/:reser_id')
   cancelShowtimeResered(@Param('reser_id') reser_id: string) {

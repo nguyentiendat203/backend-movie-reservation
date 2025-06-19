@@ -20,6 +20,8 @@ export class ShowtimeController {
     return this.showtimeService.create(createShowtimeDto)
   }
 
+  @Roles(UserRole.ADMIN)
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.showtimeService.findAll()

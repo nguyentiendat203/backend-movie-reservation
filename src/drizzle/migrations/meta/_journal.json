@@ -50,6 +50,13 @@
       "when": 1750230177239,
       "tag": "0006_sticky_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1750257458046,
+      "tag": "0007_same_sentinels",
+      "breakpoints": true
     }
   ]
 }

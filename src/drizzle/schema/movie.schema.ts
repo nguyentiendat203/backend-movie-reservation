@@ -12,7 +12,6 @@ export const Movie = pgTable('Movie', {
   genre_id: uuid()
     .notNull()
     .references(() => Genre.id),
-  release_date: date().notNull(),
   trailer_url: varchar({ length: 255 }),
   ...timestamps
 })

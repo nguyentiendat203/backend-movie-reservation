@@ -11,8 +11,6 @@ import { User } from '~/drizzle/schema'
 import { eq, sql } from 'drizzle-orm'
 import { hashString } from '~/utils/utils'
 import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
-import { id } from '~/drizzle/schema.helpers'
-import { an } from '@faker-js/faker/dist/airline-BUL6NtOJ'
 
 @Injectable()
 export class AuthService {
@@ -50,6 +48,20 @@ export class AuthService {
       user_id: user.id,
       access_token,
       refresh_token
+    }
+  }
+
+  async logout(user: IUser) {
+    await db
+      .update(User)
+      .set({
+        refresh_token_hash: null
+      })
+      .where(eq(User.id, user.id))
+
+    return {
+      user_id: user.id,
+      message: 'Logout successfully'
     }
   }
 

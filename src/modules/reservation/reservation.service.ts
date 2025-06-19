@@ -115,11 +115,6 @@ export class ReservationService {
     }
   }
 
-  async create(showtime_id: string) {
-    const seats = await db.select().from(Seat).where(eq(Seat.showtime_id, showtime_id))
-    return { seats }
-  }
-
   async findAll() {
     return await db.query.Reservation.findMany({
       with: {
