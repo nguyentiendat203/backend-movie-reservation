@@ -5,5 +5,8 @@
   "compilerOptions": {
     "assets": ["mail/templates/**/*"],
     "deleteOutDir": true
+  },
+  "generateOptions": {
+    "spec": false
   }
 }

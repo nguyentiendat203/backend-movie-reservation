@@ -12,29 +12,29 @@ import { Roles } from '~/decorators/role.decorator'
 export class SeatController {
   constructor(private readonly seatService: SeatService) {}
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Get()
-  findAll() {
-    return this.seatService.findAll()
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Get()
+  // findAll() {
+  //   return this.seatService.findAll()
+  // }
 
-  @Patch('lock-seats')
-  lockSeat(@Request() req, @Body() body: CreateReservationDto) {
-    return this.seatService.lockSeats(req.user.id, body)
-  }
+  // @Patch('lock-seats')
+  // lockSeat(@Request() req, @Body() body: CreateReservationDto) {
+  //   return this.seatService.lockSeats(req.user.id, body)
+  // }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateSeatDto: UpdateSeatDto) {
-    return this.seatService.update(id, updateSeatDto)
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Patch(':id')
+  // update(@Param('id', ParseUUIDPipe) id: string, @Body() updateSeatDto: UpdateSeatDto) {
+  //   return this.seatService.update(id, updateSeatDto)
+  // }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.seatService.remove(id)
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Delete(':id')
+  // remove(@Param('id', ParseUUIDPipe) id: string) {
+  //   return this.seatService.remove(id)
+  // }
 }

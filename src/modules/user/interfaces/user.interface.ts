@@ -1,4 +1,4 @@
-import { User } from '~/drizzle/schema'
-import { InferModel } from 'drizzle-orm'
+// import { User } from '~/drizzle/schema'
+// import { InferModel } from 'drizzle-orm'
 
-export type IUser = InferModel<typeof User>
+// export type IUser = InferModel<typeof User>

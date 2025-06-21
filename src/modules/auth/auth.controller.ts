@@ -17,54 +17,54 @@ export class AuthController {
     private userService: UserService
   ) {}
 
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user)
-  }
+  // @UseGuards(LocalAuthGuard)
+  // @Post('login')
+  // async login(@Request() req) {
+  //   return this.authService.login(req.user)
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @Patch('logout')
-  async logout(@Request() req) {
-    return this.authService.logout(req.user)
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Patch('logout')
+  // async logout(@Request() req) {
+  //   return this.authService.logout(req.user)
+  // }
 
-  @UseGuards(JwtRefreshTokenGuard)
-  @Post('refresh')
-  async refreshAccessToken(@Request() req) {
-    const access_token = this.authService.generateAccessToken({
-      user_id: req.user.id,
-      email: req.user.email
-    })
-    return {
-      user_id: req.user.id,
-      access_token
-    }
-  }
+  // @UseGuards(JwtRefreshTokenGuard)
+  // @Post('refresh')
+  // async refreshAccessToken(@Request() req) {
+  //   const access_token = this.authService.generateAccessToken({
+  //     user_id: req.user.id,
+  //     email: req.user.email
+  //   })
+  //   return {
+  //     user_id: req.user.id,
+  //     access_token
+  //   }
+  // }
 
-  @Public()
-  @Post('sign-up')
-  create(@Body() body: CreateAuthDto) {
-    return this.authService.signUp(body)
-  }
+  // @Public()
+  // @Post('sign-up')
+  // create(@Body() body: CreateAuthDto) {
+  //   return this.authService.signUp(body)
+  // }
 
-  @Post('forgot-password')
-  async forgotPassword(@Body('email') email: string) {
-    const { user, token, message } = await this.authService.forgotPassword(email)
-    await this.mailService.sendEMail(user, token)
-    return { message }
-  }
+  // @Post('forgot-password')
+  // async forgotPassword(@Body('email') email: string) {
+  //   const { user, token, message } = await this.authService.forgotPassword(email)
+  //   await this.mailService.sendEMail(user, token)
+  //   return { message }
+  // }
 
-  @Post('reset-password')
-  async resetPassword(@Body() dto: ResetPasswordDto) {
-    const { payload, hashedPassWord } = await this.authService.verifyTokenAndHashNewPassWord(dto)
-    await this.userService.updatePassword(payload.user_id, hashedPassWord)
-    return { message: 'Mật khẩu đã được cập nhật thành công' }
-  }
+  // @Post('reset-password')
+  // async resetPassword(@Body() dto: ResetPasswordDto) {
+  //   const { payload, hashedPassWord } = await this.authService.verifyTokenAndHashNewPassWord(dto)
+  //   await this.userService.updatePassword(payload.user_id, hashedPassWord)
+  //   return { message: 'Mật khẩu đã được cập nhật thành công' }
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return this.authService.getProfile(req.user.id)
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Get('profile')
+  // getProfile(@Request() req) {
+  //   return this.authService.getProfile(req.user.id)
+  // }
 }

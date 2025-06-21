@@ -11,30 +11,30 @@ import { UpdateAuthDto } from '~/modules/auth/dto/update-auth.dto'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() body: CreateAuthDto) {
-    return this.userService.create(body)
-  }
+  // @Post()
+  // create(@Body() body: CreateAuthDto) {
+  //   return this.userService.create(body)
+  // }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @UseGuards(JwtAccessTokenGuard)
-  @Get()
-  findAll() {
-    return this.userService.findAll()
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Get()
+  // findAll() {
+  //   return this.userService.findAll()
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.userService.update(id, updateAuthDto)
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Patch(':id')
+  // update(@Param('id', ParseUUIDPipe) id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  //   return this.userService.update(id, updateAuthDto)
+  // }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @UseGuards(JwtAccessTokenGuard)
-  @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.userService.remove(id)
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Delete(':id')
+  // remove(@Param('id', ParseUUIDPipe) id: string) {
+  //   return this.userService.remove(id)
+  // }
 }

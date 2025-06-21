@@ -10,29 +10,29 @@ import { Role } from '~/common/types'
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
-  @UseGuards(JwtAccessTokenGuard)
-  @Post()
-  reserShowtime(@Request() req, @Body() body: CreateReservationDto) {
-    return this.reservationService.reserShowtime(req.user, body)
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Post()
+  // reserShowtime(@Request() req, @Body() body: CreateReservationDto) {
+  //   return this.reservationService.reserShowtime(req.user, body)
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @Get('my')
-  findShowtimesOfUser(@Request() req) {
-    return this.reservationService.findMyReservation(req.user)
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Get('my')
+  // findShowtimesOfUser(@Request() req) {
+  //   return this.reservationService.findMyReservation(req.user)
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @Patch('cancel/:reser_id')
-  cancelShowtimeResered(@Param('reser_id', ParseUUIDPipe) reser_id: string) {
-    return this.reservationService.cancelShowtimeResered(reser_id)
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Patch('cancel/:reser_id')
+  // cancelShowtimeResered(@Param('reser_id', ParseUUIDPipe) reser_id: string) {
+  //   return this.reservationService.cancelShowtimeResered(reser_id)
+  // }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @UseGuards(JwtAccessTokenGuard)
-  @Get()
-  findAll() {
-    return this.reservationService.findAll()
-  }
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Get()
+  // findAll() {
+  //   return this.reservationService.findAll()
+  // }
 }

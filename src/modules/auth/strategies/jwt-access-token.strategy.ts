@@ -23,9 +23,9 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: IJwtPayload) {
-    if (!payload || !payload.email) {
-      throw new BadRequestException('Invalid token payload')
-    }
-    return await this.userService.findOne(payload.email)
+    // if (!payload || !payload.email) {
+    //   throw new BadRequestException('Invalid token payload')
+    // }
+    // return await this.userService.findOne(payload.email)
   }
 }

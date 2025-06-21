@@ -13,54 +13,54 @@ import { Public } from '~/decorators/auth.decorator'
 export class ShowtimeController {
   constructor(private readonly showtimeService: ShowtimeService) {}
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  @Post()
-  create(@Body() createShowtimeDto: CreateShowtimeDto) {
-    return this.showtimeService.create(createShowtimeDto)
-  }
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Post()
+  // create(@Body() createShowtimeDto: CreateShowtimeDto) {
+  //   return this.showtimeService.create(createShowtimeDto)
+  // }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  @Get()
-  findAll() {
-    return this.showtimeService.findAll()
-  }
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Get()
+  // findAll() {
+  //   return this.showtimeService.findAll()
+  // }
 
-  @Public()
-  @Get('movie/:movie_id')
-  findAllShowtimeOfMovie(@Param('movie_id', ParseUUIDPipe) movie_id: string) {
-    return this.showtimeService.findAllShowtimeOfMovie(movie_id)
-  }
+  // @Public()
+  // @Get('movie/:movie_id')
+  // findAllShowtimeOfMovie(@Param('movie_id', ParseUUIDPipe) movie_id: string) {
+  //   return this.showtimeService.findAllShowtimeOfMovie(movie_id)
+  // }
 
-  @Public()
-  @Get('seats/available/:showtime_id')
-  findSeatsAvailableOfShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
-    return this.showtimeService.findSeatsAvailableOfShowtime(showtime_id)
-  }
+  // @Public()
+  // @Get('seats/available/:showtime_id')
+  // findSeatsAvailableOfShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
+  //   return this.showtimeService.findSeatsAvailableOfShowtime(showtime_id)
+  // }
 
-  @Public()
-  @Get('seats/:showtime_id')
-  findSeatsBelongShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
-    return this.showtimeService.findSeatsBelongShowtime(showtime_id)
-  }
+  // @Public()
+  // @Get('seats/:showtime_id')
+  // findSeatsBelongShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
+  //   return this.showtimeService.findSeatsBelongShowtime(showtime_id)
+  // }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.showtimeService.findOne(id)
-  }
+  // @Get(':id')
+  // findOne(@Param('id', ParseUUIDPipe) id: string) {
+  //   return this.showtimeService.findOne(id)
+  // }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateShowtimeDto: UpdateShowtimeDto) {
-    return this.showtimeService.update(id, updateShowtimeDto)
-  }
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Patch(':id')
+  // update(@Param('id', ParseUUIDPipe) id: string, @Body() updateShowtimeDto: UpdateShowtimeDto) {
+  //   return this.showtimeService.update(id, updateShowtimeDto)
+  // }
 
-  @Roles(UserRole.ADMIN)
-  @UseGuards(RolesGuard)
-  @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.showtimeService.remove(id)
-  }
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Delete(':id')
+  // remove(@Param('id', ParseUUIDPipe) id: string) {
+  //   return this.showtimeService.remove(id)
+  // }
 }
