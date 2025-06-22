@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
-import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
-import { Showtime } from '~/modules/showtime/entities/showtime.entities'
-import { User } from '~/modules/user/entities/user.entities'
+import { BaseEntity } from '~/shared/base/base.entity'
+import { Showtime } from '~/modules/showtime/entities/showtime.entity'
+import { User } from '~/modules/user/entities/user.entity'
+import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entity'
 
 export enum ReservationStatus {
   CONFIRMED = 'CONFIRMED',

@@ -5,7 +5,6 @@ import { UpdateMovieDto } from './dto/update-movie.dto'
 import { MoviesFilter } from '~/modules/movie/interfaces/movie.interface'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 import { Roles } from '~/decorators/role.decorator'
-import { UserRole } from '~/modules/auth/dto/create-auth.dto'
 import { RolesGuard } from '~/modules/auth/guards/roles.guard'
 
 @Controller('movie')

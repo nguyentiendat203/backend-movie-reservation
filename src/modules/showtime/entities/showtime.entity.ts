@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
-import { Movie } from '~/modules/movie/entities/movie.entities'
-import { Reservation } from '~/modules/reservation/entities/reservation.entities'
-import { Seat } from '~/modules/seat/entities/seat.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
-import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entities'
+import { Movie } from '~/modules/movie/entities/movie.entity'
+import { Reservation } from '~/modules/reservation/entities/reservation.entity'
+import { Seat } from '~/modules/seat/entities/seat.entity'
+import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entity'
+import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('Showtime')
 export class Showtime extends BaseEntity {

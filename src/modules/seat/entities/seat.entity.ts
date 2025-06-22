@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
-import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
-import { Showtime } from '~/modules/showtime/entities/showtime.entities'
-import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entities'
+import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entity'
+import { Showtime } from '~/modules/showtime/entities/showtime.entity'
+import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entity'
+import { BaseEntity } from '~/shared/base/base.entity'
 
 export enum SeatType {
   NORMAL = 'NORMAL',

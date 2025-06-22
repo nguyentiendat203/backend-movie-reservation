@@ -1,7 +1,7 @@
 import { Entity, ManyToOne } from 'typeorm'
-import { Reservation } from '~/modules/reservation/entities/reservation.entities'
-import { Seat } from '~/modules/seat/entities/seat.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
+import { Reservation } from '~/modules/reservation/entities/reservation.entity'
+import { Seat } from '~/modules/seat/entities/seat.entity'
+import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('Reservation_Seat')
 export class ReservationSeat extends BaseEntity {

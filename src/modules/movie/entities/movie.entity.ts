@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
-import { Genre } from '~/modules/genre/entities/genre.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
-import { Showtime } from '~/modules/showtime/entities/showtime.entities'
+import { Genre } from '~/modules/genre/entities/genre.entity'
+import { BaseEntity } from '~/shared/base/base.entity'
+import { Showtime } from '~/modules/showtime/entities/showtime.entity'
 
 @Entity('Movie')
 export class Movie extends BaseEntity {

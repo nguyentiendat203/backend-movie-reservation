@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne } from 'typeorm'
-import { Seat } from '~/modules/seat/entities/seat.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
-import { Showtime } from '~/modules/showtime/entities/showtime.entities'
-import { User } from '~/modules/user/entities/user.entities'
+import { Seat } from '~/modules/seat/entities/seat.entity'
+import { Showtime } from '~/modules/showtime/entities/showtime.entity'
+import { User } from '~/modules/user/entities/user.entity'
+import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('Temporary_Lock')
 export class TemporaryLock extends BaseEntity {

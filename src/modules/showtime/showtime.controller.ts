@@ -5,7 +5,6 @@ import { UpdateShowtimeDto } from './dto/update-showtime.dto'
 import { Roles } from '~/decorators/role.decorator'
 import { RolesGuard } from '~/modules/auth/guards/roles.guard'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
-import { UserRole } from '~/modules/auth/dto/create-auth.dto'
 import { Public } from '~/decorators/auth.decorator'
 
 @UseGuards(JwtAccessTokenGuard)

@@ -8,7 +8,7 @@ import { UserService } from '~/modules/user/user.service'
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly userService: UserService,
+    // private readonly userService: UserService,
     private readonly configService: ConfigService
   ) {
     const secretKey = configService.get<string>('ACCESS_TOKEN_SECRET')

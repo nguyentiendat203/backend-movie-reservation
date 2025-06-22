@@ -13,8 +13,8 @@ import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly mailService: MailService,
-    private userService: UserService
+    private readonly mailService: MailService
+    // private userService: UserService
   ) {}
 
   // @UseGuards(LocalAuthGuard)

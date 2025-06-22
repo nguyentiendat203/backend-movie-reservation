@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Exclude } from 'class-transformer'
+import { Entity, Column, OneToMany } from 'typeorm'
 import { Role } from '~/common/types'
-import { Reservation } from '~/modules/reservation/entities/reservation.entities'
-import { BaseEntity } from '~/modules/shared/base/base.entity'
-import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entities'
+import { Reservation } from '~/modules/reservation/entities/reservation.entity'
+import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entity'
+import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('User')
 export class User extends BaseEntity {
@@ -16,12 +17,14 @@ export class User extends BaseEntity {
   email: string
 
   @Column({ type: 'varchar', length: 255 })
+  @Exclude()
   password: string
 
   @Column({ type: 'enum', enum: Role, default: Role.USER })
   role: Role
 
   @Column({ type: 'varchar', length: 255, nullable: true })
+  @Exclude()
   refresh_token_hash: string | null
 
   @OneToMany(() => TemporaryLock, (temporaryLock) => temporaryLock.user)
@@ -29,4 +32,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Reservation, (reservation) => reservation.user)
   reservations: Reservation[]
+
+  // constructor(partial: Partial<User>) {
+  //   super()
+  //   Object.assign(this, partial)
+  // }
 }

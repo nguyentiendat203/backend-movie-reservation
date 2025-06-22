@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { CreateAuthDto } from './dto/create-auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UserService } from '../user/user.service'
@@ -8,11 +8,13 @@ import { env } from '~/common/config/environment'
 import { eq, sql } from 'drizzle-orm'
 import { hashString } from '~/utils/utils'
 import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
+import { UserRepositoryInterface } from '~/modules/user/interfaces/user.repository.interface'
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
+    // @Inject('UserRepositoryInterface') // ✅ Token đúng với module
+    // private readonly usersRepository: UserRepositoryInterface, // private usersService: UserService,
     private jwtService: JwtService
   ) {}
 
