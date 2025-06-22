@@ -9,6 +9,6 @@ export interface IBaseRepository<T> {
   findOneByCondition(condition: Record<string, any>): Promise<T | null>
 
   create(data: DeepPartial<T>): Promise<T>
-  update(id: string, data: QueryDeepPartialEntity<T>): Promise<T>
-  softRemove(id: string): Promise<void>
+  update(id: string, data: QueryDeepPartialEntity<T>): Promise<boolean>
+  softRemove(id: string): Promise<boolean>
 }

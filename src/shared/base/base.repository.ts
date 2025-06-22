@@ -39,16 +39,16 @@ export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepos
     return this.repository.save(entity)
   }
 
-  async update(id: string, data: QueryDeepPartialEntity<T>): Promise<T> {
-    await this.repository.update(id, data)
-    const updated = await this.findOneById(id)
-    if (!updated) throw new Error('Entity not found after update')
-    return updated
+  async update(id: string, data: QueryDeepPartialEntity<T>): Promise<boolean> {
+    const entity = await this.findOneById(id)
+    if (!entity) return false
+
+    return !!(await this.repository.update(id, data))
   }
 
-  async softRemove(id: string): Promise<void> {
+  async softRemove(id: string): Promise<boolean> {
     const entity = await this.findOneById(id)
-    if (!entity) throw new Error('Entity not found')
-    await this.repository.softRemove(entity) // Soft Remove (It need provided @DeleteDateColumn in Entity)
+    if (!entity) return false
+    return !!(await this.repository.softRemove(entity)) // Soft Remove (It need provided @DeleteDateColumn in Entity)
   }
 }

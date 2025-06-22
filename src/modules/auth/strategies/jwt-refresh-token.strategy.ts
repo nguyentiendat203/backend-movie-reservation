@@ -25,10 +25,10 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh
   }
 
   async validate(request: Request, payload: IJwtPayload) {
-    // const refreshToken = request.headers.authorization?.split(' ')[1]
-    // if (!refreshToken) {
-    //   throw new BadRequestException('Refresh token is missing')
-    // }
-    // return await this.authService.getUserIfRefreshTokenMatched(payload.user_id, refreshToken)
+    const refreshToken = request.headers.authorization?.split(' ')[1]
+    if (!refreshToken) {
+      throw new BadRequestException('Refresh token is missing')
+    }
+    return await this.authService.getUserIfRefreshTokenMatched(payload.user_id, refreshToken)
   }
 }

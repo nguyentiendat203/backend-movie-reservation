@@ -23,11 +23,11 @@ export abstract class BaseService<T extends BaseEntity> implements IBaseService<
     return this.repository.create(data)
   }
 
-  update(id: string, data: QueryDeepPartialEntity<T>): Promise<T> {
+  update(id: string, data: QueryDeepPartialEntity<T>): Promise<boolean> {
     return this.repository.update(id, data)
   }
 
-  softRemove(id: string): Promise<void> {
+  softRemove(id: string): Promise<boolean> {
     return this.repository.softRemove(id)
   }
 }

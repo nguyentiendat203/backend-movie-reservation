@@ -1,14 +1,15 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { IJwtPayload } from '~/common/types'
-import { UserService } from '~/modules/user/user.service'
+import { UserRepositoryInterface } from '~/modules/user/interfaces/user.repository.interface'
 
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor(
-    // private readonly userService: UserService,
+    @Inject('UserRepositoryInterface')
+    private readonly usersRepository: UserRepositoryInterface,
     private readonly configService: ConfigService
   ) {
     const secretKey = configService.get<string>('ACCESS_TOKEN_SECRET')
@@ -23,9 +24,9 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: IJwtPayload) {
-    // if (!payload || !payload.email) {
-    //   throw new BadRequestException('Invalid token payload')
-    // }
-    // return await this.userService.findOne(payload.email)
+    if (!payload || !payload.email) {
+      throw new BadRequestException('Invalid token payload')
+    }
+    return await this.usersRepository.findOneByCondition({ email: payload.email })
   }
 }
