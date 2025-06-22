@@ -1,4 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, ParseUUIDPipe, Inject, Put, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+  ParseUUIDPipe,
+  Inject,
+  Put,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe
+} from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateAuthDto } from '~/modules/auth/dto/create-auth.dto'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
@@ -10,6 +28,7 @@ import { User } from '~/modules/user/entities/user.entity'
 import { CreateUserDto } from '~/modules/user/dto/create-user.dto'
 import { UpdateUserDto } from '~/modules/user/dto/update-user.dto'
 import { DeepPartial } from 'typeorm'
+import { FindAllResponse } from '~/shared/base/base.repository.interface'
 
 @Controller('user')
 export class UserController {
@@ -43,8 +62,12 @@ export class UserController {
   // }
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll()
+  async getAllUsers(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
+  ): Promise<FindAllResponse<User>> {
+    return this.userService.findAll(page, limit)
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

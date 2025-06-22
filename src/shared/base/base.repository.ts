@@ -1,14 +1,29 @@
-// shared/base/base.repository.ts
-import { DeepPartial, Entity, FindOptionsWhere, Repository } from 'typeorm'
-import { IBaseRepository } from './base.repository.interface'
+import { FindOptionsWhere, Repository } from 'typeorm'
+import { FindAllResponse, IBaseRepository } from './base.repository.interface'
 import { BaseEntity } from '~/shared/base/base.entity'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 
 export abstract class BaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
   constructor(protected readonly repository: Repository<T>) {}
 
-  async findAll(): Promise<T[]> {
-    return await this.repository.find()
+  async findAll(page?: number, limit?: number): Promise<FindAllResponse<T>> {
+    if (page && limit) {
+      const offset = (page - 1) * limit
+      const [items, count] = await this.repository.findAndCount({
+        skip: offset,
+        take: limit
+      })
+      return {
+        totalPages: Math.ceil(count / limit),
+        count,
+        items
+      }
+    }
+    const [items, count] = await this.repository.findAndCount()
+    return {
+      count,
+      items
+    }
   }
 
   async findOneById(id: string): Promise<T | null> {
