@@ -20,12 +20,8 @@ import { Genre } from '~/modules/genre/entities/genre.entity'
     {
       provide: 'UserRepositoryInterface',
       useClass: UserRepository
-    },
-    {
-      provide: 'UserServiceInterface',
-      useClass: UserService
     }
   ],
-  exports: ['UserServiceInterface', 'UserRepositoryInterface']
+  exports: [UserService, 'UserRepositoryInterface']
 })
 export class UserModule {}

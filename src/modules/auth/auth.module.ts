@@ -9,23 +9,11 @@ import { ConfigModule } from '@nestjs/config'
 import { JwtAccessTokenStrategy } from '~/modules/auth/strategies/jwt-access-token.strategy'
 import { JwtRefreshTokenStrategy } from '~/modules/auth/strategies/jwt-refresh-token.strategy'
 import { MailModule } from '~/modules/mail/mail.module'
-import { UserRepository } from '~/modules/user/repository/user.repository'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from '~/modules/user/entities/user.entity'
 
 @Module({
-  imports: [UserModule, PassportModule, MailModule, JwtModule.register({}), ConfigModule, TypeOrmModule.forFeature([User])],
+  imports: [UserModule, PassportModule, MailModule, JwtModule.register({}), ConfigModule],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    JwtAccessTokenStrategy,
-    JwtRefreshTokenStrategy,
-    {
-      provide: 'UserRepositoryInterface',
-      useClass: UserRepository
-    }
-  ],
+  providers: [AuthService, LocalStrategy, JwtAccessTokenStrategy, JwtRefreshTokenStrategy],
   exports: [AuthService]
 })
 export class AuthModule {}
