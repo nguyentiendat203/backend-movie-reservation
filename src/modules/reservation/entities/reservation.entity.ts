@@ -11,10 +11,10 @@ export enum ReservationStatus {
 
 @Entity('Reservation')
 export class Reservation extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.reservations)
+  @ManyToOne(() => User, (user) => user.reservations, { cascade: true })
   user: User
 
-  @ManyToOne(() => Showtime, (showtime) => showtime.reservations)
+  @ManyToOne(() => Showtime, (showtime) => showtime.reservations, { cascade: true })
   showtime: Showtime
 
   @Column({ type: 'enum', enum: ReservationStatus, default: ReservationStatus.CONFIRMED })

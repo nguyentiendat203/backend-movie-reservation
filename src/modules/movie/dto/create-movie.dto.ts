@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsInt, IsUrl, IsUUID, IsDateString, IsOptional, MaxLength } from 'class-validator'
+import { IsString, IsNotEmpty, IsInt, IsOptional, MaxLength } from 'class-validator'
 export class CreateMovieDto {
   @IsString()
   @IsNotEmpty()
@@ -16,18 +16,13 @@ export class CreateMovieDto {
 
   @IsString()
   @IsOptional()
-  description?: string
+  description: string
 
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
   genre_id: string
 
-  @IsDateString()
-  @IsNotEmpty()
-  release_date: string
-
-  @IsUrl()
   @IsOptional()
   @MaxLength(255)
-  trailer_url?: string
+  trailer_url: string
 }

@@ -18,10 +18,10 @@ import { Genre } from '~/modules/genre/entities/genre.entity'
   providers: [
     UserService,
     {
-      provide: 'UserRepositoryInterface',
+      provide: 'IUserRepository',
       useClass: UserRepository
     }
   ],
-  exports: [UserService, 'UserRepositoryInterface']
+  exports: [UserService, 'IUserRepository']
 })
 export class UserModule {}

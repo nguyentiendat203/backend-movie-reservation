@@ -14,18 +14,18 @@ import { FindAllResponse } from '~/shared/base/base.repository.interface'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @UseGuards(JwtAccessTokenGuard)
-  @Get()
-  async getAllUsers(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
-    page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
-  ): Promise<FindAllResponse<User>> {
-    return this.userService.findAll(page, limit)
-  }
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Roles(Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Get()
+  // async getAllUsers(
+  //   @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+  //   page: number,
+  //   @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
+  // ): Promise<FindAllResponse<User>> {
+  //   return this.userService.findAll(page, limit)
+  // }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')

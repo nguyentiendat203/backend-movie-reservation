@@ -3,6 +3,7 @@ import { FindAllResponse, IBaseRepository } from './base.repository.interface'
 import { BaseEntity } from '~/shared/base/base.entity'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 import { DeepPartial } from 'typeorm'
+import { ConditionFilters } from '~/common/types'
 
 export abstract class BaseService<T extends BaseEntity> implements IBaseService<T> {
   constructor(protected readonly repository: IBaseRepository<T>) {}
@@ -15,8 +16,8 @@ export abstract class BaseService<T extends BaseEntity> implements IBaseService<
     return this.repository.findOneByCondition(condition)
   }
 
-  findAll(page?: number, limit?: number): Promise<FindAllResponse<T>> {
-    return this.repository.findAll(page, limit)
+  findAll(conditionFilter?: ConditionFilters): Promise<FindAllResponse<T>> {
+    return this.repository.findAll(conditionFilter)
   }
 
   create(data: DeepPartial<T>): Promise<T> {

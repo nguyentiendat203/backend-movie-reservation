@@ -1,13 +1,31 @@
 import { CreateSeatDto } from './dto/create-seat.dto'
 import { UpdateSeatDto } from './dto/update-seat.dto'
 import { CreateReservationDto } from '~/modules/reservation/dto/create-reservation.dto'
-import { eq, lt, sql } from 'drizzle-orm'
-import { ConflictException, Injectable } from '@nestjs/common'
+import { ConflictException, Inject, Injectable } from '@nestjs/common'
+import { BaseService } from '~/shared/base/base.service'
+import { Seat } from '~/modules/seat/entities/seat.entity'
+import { ISeatService } from '~/modules/seat/interfaces/seat.service.interface'
+import { ISeatRepository } from '~/modules/seat/interfaces/seat.repository.interface'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Like, Repository } from 'typeorm'
+import { ConditionFilters } from '~/common/types'
 
 const LOCK_DURATION_MINUTES = 5
 
 @Injectable()
-export class SeatService {
+export class SeatService extends BaseService<Seat> implements ISeatService {
+  constructor(
+    @Inject('SeatRepositoryInterface')
+    private readonly seatRepo: ISeatRepository,
+
+    @InjectRepository(Seat) private readonly seatRepoTest: Repository<Seat>
+  ) {
+    super(seatRepo)
+  }
+
+  async findSeatsBelongShowtime(showtime_id: string) {
+    // return await this.seatRepo.findAll({ showtime_id } as Record<string, number>)
+  }
   // create(createSeatDto: CreateSeatDto) {
   //   return 'This action adds a new seat'
   // }

@@ -1,16 +1,16 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import { hashString } from '~/utils/utils'
 import { BaseService } from '~/shared/base/base.service'
-import { UserServiceInterface } from '~/modules/user/interfaces/user.service.interface'
-import { UserRepositoryInterface } from '~/modules/user/interfaces/user.repository.interface'
+import { IUserService } from '~/modules/user/interfaces/user.service.interface'
+import { IUserRepository } from '~/modules/user/interfaces/user.repository.interface'
 import { User } from '~/modules/user/entities/user.entity'
 import { DeepPartial } from 'typeorm'
 
 @Injectable()
-export class UserService extends BaseService<User> implements UserServiceInterface {
+export class UserService extends BaseService<User> implements IUserService {
   constructor(
-    @Inject('UserRepositoryInterface')
-    private readonly usersRepository: UserRepositoryInterface
+    @Inject('IUserRepository')
+    private readonly usersRepository: IUserRepository
   ) {
     super(usersRepository)
   }

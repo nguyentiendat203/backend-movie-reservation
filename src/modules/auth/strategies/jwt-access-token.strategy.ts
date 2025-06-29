@@ -3,13 +3,13 @@ import { PassportStrategy } from '@nestjs/passport'
 import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { IJwtPayload } from '~/common/types'
-import { UserRepositoryInterface } from '~/modules/user/interfaces/user.repository.interface'
+import { IUserRepository } from '~/modules/user/interfaces/user.repository.interface'
 
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject('UserRepositoryInterface')
-    private readonly usersRepository: UserRepositoryInterface,
+    @Inject('IUserRepository')
+    private readonly usersRepository: IUserRepository,
     private readonly configService: ConfigService
   ) {
     const secretKey = configService.get<string>('ACCESS_TOKEN_SECRET')

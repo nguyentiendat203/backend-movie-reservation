@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entity'
 import { Showtime } from '~/modules/showtime/entities/showtime.entity'
 import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entity'
@@ -11,7 +11,7 @@ export enum SeatType {
 
 @Entity('Seat')
 export class Seat extends BaseEntity {
-  @ManyToOne(() => Showtime, (showtime) => showtime.seats)
+  @ManyToOne(() => Showtime, (showtime) => showtime.seats, { cascade: true })
   showtime: Showtime
 
   @Column({ type: 'varchar', length: 255 })

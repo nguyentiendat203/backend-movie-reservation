@@ -6,13 +6,13 @@ import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('Temporary_Lock')
 export class TemporaryLock extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.temporaryLocks)
+  @ManyToOne(() => User, (user) => user.temporaryLocks, { cascade: true })
   user: User
 
-  @ManyToOne(() => Showtime, (showtime) => showtime.temporaryLocks)
+  @ManyToOne(() => Showtime, (showtime) => showtime.temporaryLocks, { cascade: true })
   showtime: Showtime
 
-  @ManyToOne(() => Seat, (seat) => seat.temporaryLocks)
+  @ManyToOne(() => Seat, (seat) => seat.temporaryLocks, { cascade: true })
   seat: Seat
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

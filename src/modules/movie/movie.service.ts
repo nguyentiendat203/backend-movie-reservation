@@ -1,11 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { asc, count, eq, isNull, sql } from 'drizzle-orm'
-import { MoviesFilter } from '~/modules/movie/interfaces/movie.interface'
+import { BaseService } from '~/shared/base/base.service'
+import { Movie } from '~/modules/movie/entities/movie.entity'
+import { IMovieService } from '~/modules/movie/interfaces/showtime.service.interface'
+import { IMovieRepository } from '~/modules/movie/interfaces/showtime.repository.interface'
 
 @Injectable()
-export class MovieService {
+export class MovieService extends BaseService<Movie> implements IMovieService {
+  constructor(
+    @Inject('MovieRepositoryInterface')
+    private readonly movieRepo: IMovieRepository
+  ) {
+    super(movieRepo)
+  }
   // async create(createMovieDto: CreateMovieDto) {
   //   await db.insert(Movie).values({ ...createMovieDto })
   //   return 'Create new movie successfully'

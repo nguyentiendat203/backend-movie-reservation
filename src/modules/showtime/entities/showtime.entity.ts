@@ -7,7 +7,7 @@ import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('Showtime')
 export class Showtime extends BaseEntity {
-  @ManyToOne(() => Movie, (movie) => movie.showtimes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Movie, (movie) => movie.showtimes, { cascade: true })
   movie: Movie
 
   @Column({ type: 'timestamptz' })

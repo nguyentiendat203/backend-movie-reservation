@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query
 import { MovieService } from './movie.service'
 import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
-import { MoviesFilter } from '~/modules/movie/interfaces/movie.interface'
 import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guard'
 import { Roles } from '~/decorators/role.decorator'
 import { RolesGuard } from '~/modules/auth/guards/roles.guard'
@@ -14,24 +13,29 @@ export class MovieController {
   // @Roles(UserRole.ADMIN)
   // @UseGuards(RolesGuard)
   // @UseGuards(JwtAccessTokenGuard)
-  // @Post()
-  // create(@Body() createMovieDto: CreateMovieDto) {
-  //   return this.movieService.create(createMovieDto)
-  // }
+  @Post()
+  create(@Body() createMovieDto: CreateMovieDto) {
+    return this.movieService.create(createMovieDto)
+  }
 
-  // @Get()
-  // findAll(
-  //   @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  //   @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  //   @Query('category', ParseUUIDPipe) category: string,
-  //   @Query('title') title: string
-  // ) {
-  //   const filter: MoviesFilter = {
-  //     category,
-  //     title
-  //   }
-  //   return this.movieService.findAll(page, limit, filter)
-  // }
+  @Get()
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
+    limit: number
+  ) {
+    return this.movieService.findAll({
+      page,
+      limit,
+      relations: { genre: true },
+      select: {
+        genre: {
+          name: true
+        }
+      }
+    })
+  }
 
   // @Get(':genre_id')
   // findAllByGenre(@Param('genre_id', ParseUUIDPipe) genre_id: string) {
@@ -46,10 +50,10 @@ export class MovieController {
   // @Roles(UserRole.ADMIN)
   // @UseGuards(RolesGuard)
   // @UseGuards(JwtAccessTokenGuard)
-  // @Patch(':id')
-  // update(@Param('id', ParseUUIDPipe) id: string, @Body() updateMovieDto: UpdateMovieDto) {
-  //   return this.movieService.update(id, updateMovieDto)
-  // }
+  @Patch(':id')
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateMovieDto: UpdateMovieDto) {
+    return this.movieService.update(id, updateMovieDto)
+  }
 
   // @Roles(UserRole.ADMIN)
   // @UseGuards(RolesGuard)

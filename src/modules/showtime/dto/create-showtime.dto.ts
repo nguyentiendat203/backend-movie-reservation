@@ -1,9 +1,12 @@
-import { IsNotEmpty, IsDateString, IsInt, Min, MaxLength, Validate } from 'class-validator'
+import { IsNotEmpty, IsDateString, IsInt, Min, MaxLength, Validate, ValidateNested, IsUUID } from 'class-validator'
+import { Movie } from '~/modules/movie/entities/movie.entity'
+import { Seat } from '~/modules/seat/entities/seat.entity'
 import { IsEndTimeAfterStartTime } from '~/modules/showtime/dto/validators'
 
 export class CreateShowtimeDto {
   @IsNotEmpty()
-  movie_id: string
+  @IsUUID()
+  movieId: string
 
   @IsDateString()
   @IsNotEmpty()
@@ -21,4 +24,7 @@ export class CreateShowtimeDto {
   @IsNotEmpty()
   @MaxLength(255)
   location: string
+
+  @ValidateNested()
+  seats: Seat[]
 }

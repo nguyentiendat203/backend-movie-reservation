@@ -1,31 +1,37 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { CreateShowtimeDto } from './dto/create-showtime.dto'
 import { UpdateShowtimeDto } from './dto/update-showtime.dto'
-import { eq, isNull, sql } from 'drizzle-orm'
+import { BaseService } from '~/shared/base/base.service'
+import { Showtime } from '~/modules/showtime/entities/showtime.entity'
+import { IShowtimeService } from '~/modules/showtime/interfaces/showtime.service.interface'
+import { IShowtimeRepository } from '~/modules/showtime/interfaces/showtime.repository.interface'
+import { ISeatRepository } from '~/modules/seat/interfaces/seat.repository.interface'
+import { SeatRepository } from '~/modules/seat/repositories/seat.repository'
+import { Seat } from '~/modules/seat/entities/seat.entity'
+import { DeepPartial } from 'typeorm'
 
 @Injectable()
-export class ShowtimeService {
-  // async create(createShowtimeDto: CreateShowtimeDto) {
-  //   const { capacity, ...rest } = createShowtimeDto
-  //   // Step 1: Insert Showtime & get inserted ID
-  //   const [showtime] = await db
-  //     .insert(Showtime)
-  //     .values({
-  //       ...rest,
-  //       start_time: new Date(createShowtimeDto.start_time),
-  //       end_time: new Date(createShowtimeDto.end_time),
-  //       capacity
-  //     })
-  //     .returning({ id: Showtime.id })
-  //   // Step 2: Auto create seats
-  //   const seats = Array.from({ length: capacity }).map((_, index) => ({
-  //     showtime_id: showtime.id,
-  //     seat_name: `Seat ${index + 1}`,
-  //     is_active: true
-  //   }))
-  //   await db.insert(Seat).values(seats)
-  //   return { message: 'Showtime & Seats created successfully' }
-  // }
+export class ShowtimeService extends BaseService<Showtime> implements IShowtimeService {
+  constructor(
+    @Inject('ShowtimeRepositoryInterface')
+    private readonly showtimeRepo: IShowtimeRepository
+  ) {
+    super(showtimeRepo)
+  }
+  @Inject('SeatRepositoryInterface')
+  private readonly seatRepo: SeatRepository
+
+  async create(createShowtimeDto: CreateShowtimeDto): Promise<Showtime> {
+    const { capacity, ...rest } = createShowtimeDto
+
+    const seats = Array.from({ length: capacity }).map((_, index) => ({
+      seat_name: `Seat ${index + 1}`
+    }))
+    await this.seatRepo.insertMany(seats)
+
+    const showtime = this.showtimeRepo.create({ ...createShowtimeDto, seats: seats })
+    return showtime
+  }
   // async findAllShowtimeOfMovie(movie_id: string) {
   //   return await db.query.Showtime.findMany({
   //     where: (Showtime, { eq, and, isNull }) => and(eq(Showtime.movie_id, movie_id), isNull(Showtime.deleted_at))
@@ -51,11 +57,11 @@ export class ShowtimeService {
   //       )
   //   })
   // }
-  // async findSeatsBelongShowtime(showtime_id: string) {
-  //   return await db.query.Seat.findMany({
-  //     where: (Seat, { eq }) => eq(Seat.showtime_id, showtime_id)
-  //   })
-  // }
+  async findSeatsBelongShowtime(showtime_id: string) {
+    // return await db.query.Seat.findMany({
+    //   where: (Seat, { eq }) => eq(Seat.showtime_id, showtime_id)
+    // })
+  }
   // async findAll() {
   //   return await db.select().from(Showtime).where(isNull(Showtime.deleted_at))
   // }

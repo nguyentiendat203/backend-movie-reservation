@@ -32,9 +32,4 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Reservation, (reservation) => reservation.user)
   reservations: Reservation[]
-
-  // constructor(partial: Partial<User>) {
-  //   super()
-  //   Object.assign(this, partial)
-  // }
 }

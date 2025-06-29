@@ -20,7 +20,7 @@ export class Movie extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   trailer_url: string
 
-  @ManyToOne(() => Genre, (genre) => genre.movies)
+  @ManyToOne(() => Genre, (genre) => genre.movies, { cascade: true })
   genre: Genre
 
   @OneToMany(() => Showtime, (showtime) => showtime.movie)

@@ -6,16 +6,16 @@ import { IJwtPayload } from '~/common/types'
 import { env } from '~/common/config/environment'
 import { hashString } from '~/utils/utils'
 import { ResetPasswordDto } from '~/modules/user/dto/reset-pass-word.dto'
-import { UserRepositoryInterface } from '~/modules/user/interfaces/user.repository.interface'
+import { IUserRepository } from '~/modules/user/interfaces/user.repository.interface'
 import { User } from '~/modules/user/entities/user.entity'
 import { BaseService } from '~/shared/base/base.service'
-import { UserServiceInterface } from '~/modules/user/interfaces/user.service.interface'
+import { IUserService } from '~/modules/user/interfaces/user.service.interface'
 
 @Injectable()
-export class AuthService extends BaseService<User> implements UserServiceInterface {
+export class AuthService extends BaseService<User> implements IUserService {
   constructor(
-    @Inject('UserRepositoryInterface')
-    private readonly usersRepository: UserRepositoryInterface,
+    @Inject('IUserRepository')
+    private readonly usersRepository: IUserRepository,
     private jwtService: JwtService
   ) {
     super(usersRepository)
