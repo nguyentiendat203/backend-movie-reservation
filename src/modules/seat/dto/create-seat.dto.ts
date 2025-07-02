@@ -1,9 +1,9 @@
-import { IsString, IsEnum, IsNumber, IsBoolean, IsOptional, IsNotEmpty, IsDecimal, Min } from 'class-validator'
+import { IsString, IsEnum, IsBoolean, IsNotEmpty, IsDecimal, Min } from 'class-validator'
 import { SeatType } from '~/modules/seat/entities/seat.entity'
 
 export class CreateSeatDto {
   @IsNotEmpty()
-  showtime_id: string
+  showtimeId: string
 
   @IsString()
   @IsNotEmpty()

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { ShowtimeService } from './showtime.service'
 import { ShowtimeController } from './showtime.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -7,7 +7,7 @@ import { ShowtimeRepository } from '~/modules/showtime/repositories/showtime.rep
 import { SeatModule } from '~/modules/seat/seat.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Showtime]), SeatModule],
+  imports: [TypeOrmModule.forFeature([Showtime]), forwardRef(() => SeatModule)],
   controllers: [ShowtimeController],
   providers: [
     ShowtimeService,

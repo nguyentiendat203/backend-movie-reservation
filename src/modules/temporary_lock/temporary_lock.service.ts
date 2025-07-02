@@ -1,26 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTemporaryLockDto } from './dto/create-temporary_lock.dto';
-import { UpdateTemporaryLockDto } from './dto/update-temporary_lock.dto';
+import { Inject, Injectable } from '@nestjs/common'
+import { BaseService } from '~/shared/base/base.service'
+import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entity'
+import { ITempoLockService } from '~/modules/temporary_lock/interfaces/temporary_lock.service.interface'
+import { ITempoLockRepository } from '~/modules/temporary_lock/interfaces/temporary_lock.repository.interface'
 
 @Injectable()
-export class TemporaryLockService {
-  create(createTemporaryLockDto: CreateTemporaryLockDto) {
-    return 'This action adds a new temporaryLock';
-  }
-
-  findAll() {
-    return `This action returns all temporaryLock`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} temporaryLock`;
-  }
-
-  update(id: number, updateTemporaryLockDto: UpdateTemporaryLockDto) {
-    return `This action updates a #${id} temporaryLock`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} temporaryLock`;
+export class TemporaryLockService extends BaseService<TemporaryLock> implements ITempoLockService {
+  constructor(
+    @Inject('TemporaryLockRepositoryInterface')
+    private readonly tempoLockRepo: ITempoLockRepository
+  ) {
+    super(tempoLockRepo)
   }
 }
