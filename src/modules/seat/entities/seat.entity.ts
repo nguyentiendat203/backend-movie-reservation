@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm'
+import { Reservation } from '~/modules/reservation/entities/reservation.entity'
 import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entity'
 import { Showtime } from '~/modules/showtime/entities/showtime.entity'
 import { TemporaryLock } from '~/modules/temporary_lock/entities/temporary_lock.entity'

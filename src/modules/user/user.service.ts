@@ -16,7 +16,7 @@ export class UserService extends BaseService<User> implements IUserService {
   }
 
   async create(reqBody: DeepPartial<User>) {
-    const existingUser = await this.usersRepository.findOneByCondition({ email: reqBody.email })
+    const existingUser = await this.usersRepository.findOneByCondition({ where: { email: reqBody.email } })
     if (existingUser) {
       throw new BadRequestException('Email already exists')
     }

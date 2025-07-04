@@ -38,20 +38,10 @@ export class SeatService extends BaseService<Seat> implements ISeatService {
     // return await this.seatRepo.findAll({ showtime_id } as Record<string, number>)
   }
 
-  async lockSeats(userId: string, body: LockSeatDto) {
-    const { showtimeId, seatIds } = body
-    const now = new Date()
-    const expiresAt = new Date(Date.now() + LOCK_DURATION_MINUTES * 60 * 1000)
-    // 1. Check if there are any Temporary_Lock rocords with expires_at less than now and delete
-    const tempoLock = await this.tempoLockRepo.findOneByCondition({ expires_at: LessThan(now) })
-    if (tempoLock) {
-      await this.tempoLockRepo.softRemove(tempoLock.id)
-    }
-
-    // 2. Check if Seats belongs to  showtime
+  async checkSeatsBelongShowtime(showtime_id: string, seatIds: string[]): Promise<boolean> {
     const showtimeResult = await this.showtimeRepo.findAll({
       where: {
-        id: Equal(showtimeId)
+        id: Equal(showtime_id)
       },
       select: {
         id: true,
@@ -65,7 +55,22 @@ export class SeatService extends BaseService<Seat> implements ISeatService {
       }
     })
     const seatsOfShowtimeIds = showtimeResult.items[0].seats.map((item) => item.id)
-    if (!seatIds.every((seat) => seatsOfShowtimeIds.includes(seat))) {
+    return seatIds.every((seat) => seatsOfShowtimeIds.includes(seat))
+  }
+
+  async lockSeats(userId: string, body: LockSeatDto) {
+    const { showtimeId, seatIds } = body
+    const now = new Date()
+    const expiresAt = new Date(Date.now() + LOCK_DURATION_MINUTES * 60 * 1000)
+
+    // 1. Check if there are any Temporary_Lock rocords with expires_at less than now and delete
+    const tempoLock = await this.tempoLockRepo.findOneByCondition({ where: { expires_at: LessThan(now) } })
+    if (tempoLock) {
+      await this.tempoLockRepo.softRemove(tempoLock.id)
+    }
+
+    // 2. Check if Seats belongs to  showtime
+    if (!this.checkSeatsBelongShowtime(showtimeId, seatIds)) {
       throw new BadRequestException('Seats are not belong to showtime')
     }
 
@@ -84,21 +89,12 @@ export class SeatService extends BaseService<Seat> implements ISeatService {
       throw new ConflictException('Seats already locked by other users')
     }
 
-    // 4. Insert to table
-    const seats = await Promise.all(
-      seatIds.map(async (seatId) => {
-        return await this.seatRepo.findOneById(seatId as string)
-      })
-    )
-
-    const showtime = await this.showtimeRepo.findOneById(showtimeId)
-    const user = await this.userRepo.findOneById(userId)
-
-    seats.map((seat) =>
+    // 4. Insert to table TemporaryLock
+    seatIds.map((seatId) =>
       this.tempoLockRepo.create({
-        seat,
-        showtime,
-        user,
+        seat: { id: seatId },
+        showtime: { id: showtimeId },
+        user: { id: userId },
         locked_at: now,
         expires_at: expiresAt
       } as DeepPartial<TemporaryLock>)

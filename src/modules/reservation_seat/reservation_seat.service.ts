@@ -1,26 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CreateReservationSeatDto } from './dto/create-reservation_seat.dto';
-import { UpdateReservationSeatDto } from './dto/update-reservation_seat.dto';
+import { Inject, Injectable } from '@nestjs/common'
+import { BaseService } from '~/shared/base/base.service'
+import { ReservationSeat } from '~/modules/reservation_seat/entities/reservation_seat.entity'
+import { IReserSeatService } from '~/modules/reservation_seat/interfaces/reservation_seat.service.interface'
+import { IReserSeatRepository } from '~/modules/reservation_seat/interfaces/reservation_seat.repository.interface'
 
 @Injectable()
-export class ReservationSeatService {
-  create(createReservationSeatDto: CreateReservationSeatDto) {
-    return 'This action adds a new reservationSeat';
-  }
-
-  findAll() {
-    return `This action returns all reservationSeat`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} reservationSeat`;
-  }
-
-  update(id: number, updateReservationSeatDto: UpdateReservationSeatDto) {
-    return `This action updates a #${id} reservationSeat`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} reservationSeat`;
+export class ReservationSeatService extends BaseService<ReservationSeat> implements IReserSeatService {
+  constructor(
+    @Inject('IReserSeatRepository')
+    private readonly reserSeatRepo: IReserSeatRepository
+  ) {
+    super(reserSeatRepo)
   }
 }

@@ -4,7 +4,7 @@ import { BaseEntity } from '~/shared/base/base.entity'
 
 @Entity('Genre')
 export class Genre extends BaseEntity {
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255 })
   name: string
 
   @OneToMany(() => Movie, (movie) => movie.genre)

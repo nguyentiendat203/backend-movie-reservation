@@ -2,7 +2,7 @@ import { IBaseService } from './base.service.interface'
 import { FindAllResponse, IBaseRepository } from './base.repository.interface'
 import { BaseEntity } from '~/shared/base/base.entity'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
-import { DeepPartial } from 'typeorm'
+import { DeepPartial, FindOneOptions, FindOptionsWhere } from 'typeorm'
 import { ConditionFilters } from '~/common/types'
 
 export abstract class BaseService<T extends BaseEntity> implements IBaseService<T> {
@@ -12,7 +12,7 @@ export abstract class BaseService<T extends BaseEntity> implements IBaseService<
     return this.repository.findOneById(id)
   }
 
-  findOneByCondition(condition: Record<string, any>): Promise<T | null> {
+  findOneByCondition(condition: FindOneOptions<T>): Promise<T> {
     return this.repository.findOneByCondition(condition)
   }
 

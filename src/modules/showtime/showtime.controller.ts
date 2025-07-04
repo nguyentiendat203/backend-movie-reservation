@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common'
 import { ShowtimeService } from './showtime.service'
 import { CreateShowtimeDto } from './dto/create-showtime.dto'
 import { UpdateShowtimeDto } from './dto/update-showtime.dto'
@@ -8,36 +8,33 @@ import { JwtAccessTokenGuard } from '~/modules/auth/guards/jwt-access-token.guar
 import { Public } from '~/decorators/auth.decorator'
 import { Role } from '~/common/types'
 
-// @UseGuards(JwtAccessTokenGuard)
+@UseGuards(JwtAccessTokenGuard)
 @Controller('showtime')
 export class ShowtimeController {
   constructor(private readonly showtimeService: ShowtimeService) {}
 
-  // @Public()
-  // @Get('movie/:movie_id')
-  // findAllShowtimeOfMovie(@Param('movie_id', ParseUUIDPipe) movie_id: string) {
-  //   return this.showtimeService.findAllShowtimeOfMovie(movie_id)
-  // }
-
-  // @Public()
-  // @Get('seats/available/:showtime_id')
-  // findSeatsAvailableOfShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
-  //   return this.showtimeService.findSeatsAvailableOfShowtime(showtime_id)
-  // }
+  @Public()
+  @Get(':showtime_id/seats/available')
+  findSeatsAvailableOfShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
+    return this.showtimeService.findSeatsAvailableOfShowtime(showtime_id)
+  }
 
   @Public()
-  @Get('seats/:showtime_id')
+  @Get(':showtime_id/seats')
   findSeatsBelongShowtime(@Param('showtime_id', ParseUUIDPipe) showtime_id: string) {
     return this.showtimeService.findSeatsBelongShowtime(showtime_id)
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.showtimeService.findOneById(id)
+    return this.showtimeService.findOneByCondition({
+      where: { id }
+    })
   }
 
-  // @Roles(UserRole.ADMIN)
-  // @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Patch(':id')
   update(@Param('id', ParseUUIDPipe) id: string, @Body() updateShowtimeDto: UpdateShowtimeDto) {
     return this.showtimeService.update(id, updateShowtimeDto)
@@ -50,15 +47,15 @@ export class ShowtimeController {
     return this.showtimeService.softRemove(id)
   }
 
-  // @Roles(UserRole.ADMIN)
-  // @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Post()
   create(@Body() createShowtimeDto: CreateShowtimeDto) {
     return this.showtimeService.create(createShowtimeDto)
   }
 
-  // @Roles(UserRole.ADMIN)
-  // @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.showtimeService.findAll()

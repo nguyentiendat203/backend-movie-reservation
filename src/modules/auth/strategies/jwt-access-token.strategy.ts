@@ -27,6 +27,6 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
     if (!payload || !payload.email) {
       throw new BadRequestException('Invalid token payload')
     }
-    return await this.usersRepository.findOneByCondition({ email: payload.email })
+    return await this.usersRepository.findOneByCondition({ where: { email: payload.email } })
   }
 }

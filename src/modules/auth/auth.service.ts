@@ -33,7 +33,11 @@ export class AuthService extends BaseService<User> implements IUserService {
     if (!username || !pass) {
       throw new BadRequestException('Email and password are required')
     }
-    const user = await this.usersRepository.findOneByCondition({ email: username })
+    const user = await this.usersRepository.findOneByCondition({
+      where: {
+        email: username
+      }
+    })
     if (!user) {
       throw new NotFoundException('Email not found')
     }
@@ -99,7 +103,7 @@ export class AuthService extends BaseService<User> implements IUserService {
   }
 
   async forgotPassword(email: string): Promise<{ user: User; token: string; message: string }> {
-    const user = await this.usersRepository.findOneByCondition({ email })
+    const user = await this.usersRepository.findOneByCondition({ where: { email } })
     if (!user) throw new NotFoundException('Email not found')
     const token = this.generateAccessToken({ user_id: user.id, email })
     return { user, token, message: 'Password reset token has sent to your email.' }
